@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Supplier Management Module</title>
+    <link rel="stylesheet" href="index.css" />
+    <script src="index.js" defer></script>
+  </head>
+  <header>
+    <div class="left-side">
+      <a href="index.html"><img class="factory-symbol" src="assets/fruit.png"  alt="fruit"   ></a> 
+      <h1 class="factory-header">Sleepless Blueberry Factory</h1>
+    </div>
+    <div class="right-side">
+      <a href="index.html"><button class="tab-btn">Farmer</button></a>
+      <a href="product.html"><button class="tab-btn">Product</button></a>
+      <a href="sales.html"><button class="tab-btn">Sales</button></a>
+      <a href="financial.html"><button class="tab-btn"> Financial</button></a>
+      <a href="inventory.html"><button class="tab-btn">Inventory </button></a>
+      <a href="report.html"><button class="tab-btn">Report</button></a>
+    </div>
+  </header>
+  <body>
+    <main>
+      <aside>
+        <div class="tabs">
+          <button class="tab-btn" data-tab="farmerTab">
+            Add Farmers
+          </button>
+          <button class="tab-btn" data-tab="farmerList">
+            Farmer List
+          </button>
+          <button class="tab-btn" data-tab="purchaseTab">
+            Purchase Records
+          </button>
+          <button class="tab-btn" data-tab="expenseTab">
+            Expense Calculation
+          </button>
+        </div>
+      </aside>
+      <article>
+        <!-- Farmer Management -->
+        <section id="farmerTab">
+          <h2 class="addFarmer">Add New Farmer</h2>
+          <form id="farmerForm">
+            <label for="farmer_id">Farmer ID :</label>
+            <input type="number" id="farmer_id" required />
+
+            <!-- Name -->
+            <label for="first_name">First Name:</label>
+            <input type="text" id="first_name" required />
+
+            <label for="last_name">Last Name:</label>
+            <input type="text" id="last_name" name="last_name" required />
+
+            <!-- Contact Details -->
+            <label for="phone">Phone Number:</label>
+            <input type="tel" id="phone" required />
+
+            <label for="email">Email :</label>
+            <input type="email" id="email" />
+
+            <label for="city">Address :</label>
+            <input type="text" id="address" required />
+
+            <label for="region">Region:</label>
+            <input type="text" id="region" required />
+
+            <label for="latitude">Latitude (GPS):</label>
+            <input type="text" id="latitude" />
+
+            <label for="longitude">Longitude (GPS):</label>
+            <input type="text" id="longitude" />
+
+            <label for="goods">Goods:</label>
+            <input type="text" id="goods" required />
+            <button type="submit">Add Farmer</button>
+          </form>
+        </section>
+
+        <section  id="farmerList">
+          <h1>Farmer List</h1>
+          <div>
+            <div class="filtering-section">
+                <div class="filter-group">
+                  <label for="nameSearch">Search:</label>
+                  <input
+                    type="text"
+                    id="nameSearch"
+                    placeholder="Search what do you want"
+                  />
+                </div>
+
+                <div class="filter-group">
+                  <label for="farmerFilter">Filter by farmer:</label>
+                  <select id="farmerFilter">
+                    <option value="">All Farmers</option>
+                  </select>
+                </div>
+
+                <div class="filter-group">
+                  <label for="locationFilter">Filter by location:</label>
+                  <select id="locationFilter">
+                    <option value="">All Locations</option>
+                  </select>
+                </div>
+            </div>
+            <div class="table-container">
+              <table id="farmersTable">
+                <thead>
+                  <tr>
+                    <th>Farmer ID</th>
+                    <th>Firstname</th>
+                    <th>Lastname</th>
+                    <th>Phone Number</th>
+                    <th>Email</th>
+                    <th>Address</th>
+                    <th>Region</th>
+                    <th>Latitude</th>
+                    <th>Longitude</th>
+                    <th>Goods</th>
+                    <th>Update</th>
+                    <th>Delete</th>
+                  </tr>
+                </thead>
+                <tbody></tbody>
+              </table>
+            </div>
+            
+        </section>
+
+        <!-- Purchase Records -->
+        <section id="purchaseTab">
+          <h2>Purchase Records</h2>
+          <form id="purchaseForm">
+            <input
+              type="number"
+              id="purchaseId"
+              min="0"
+              placeholder="Purchase ID"
+              required
+            />
+            <select id="purchaseFarmerFilter">
+              <option value="">Select Farmer ID</option>
+            </select>
+            <select id="purchaseGoodsFilter">
+              <option value="">Select Goods</option>
+            </select>
+            <input type="date" id="purchaseDate" required />
+            <input
+              type="number"
+              id="quantity"
+              placeholder="Quantity (kg)"
+              min="0"
+              required
+            />
+            <input
+              type="number"
+              id="price"
+              placeholder="Price per kg"
+              min="0"
+              required
+            />
+            <button type="submit">Log Purchase</button>
+          </form>
+          <br>
+          <hr size="10" style="background-color: rgb(69, 5, 5);">
+          <div class="sorting-section">
+            <button id="sortPurchaseDate">Sort by Date</button>
+            <button id="sortPurchaseFarmer">Sort by Farmer</button>
+            <button id="sortPurchaseAmount">Sort by Amount</button>
+          </div>
+          <div class="table-container">
+            <table id="purchasesTable">
+              <thead>
+                <tr>
+                  <th>Purchase ID</th>
+                  <th>Farmer ID</th>
+                  <th>Goods</th>
+                  <th>Date of purchase</th>
+                  <th>Quantity (kg)</th>
+                  <th>Price/kg</th>
+                  <th>Total Cost</th>
+                  <th>Update</th>
+                </tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+            <div id="indexTotalBlueberries">Total Blueberries: 0 kg</div>
+          </div>
+          <div class="summary-section">
+            <h3>Generate Purchase Summary</h3>
+            <select id="summaryType">
+              <option value="farmer">By Farmer</option>
+              <option value="time">By Time Period</option>
+            </select>
+            <input type="date" id="summaryStartDate" placeholder="Start Date" />
+            <input type="date" id="summaryEndDate" placeholder="End Date" />
+            <button id="generateSummary">Generate Summary</button>
+            <div id="summaryResult"></div>
+          </div>
+          
+        </section>
+        
+
+
+        <!-- Expense Calculation -->
+        <section id="expenseTab">
+          <h2>Expense Calculation</h2>
+          <input type="date" id="startDate" placeholder="Start Date" />
+          <input type="date" id="endDate" placeholder="End Date" />
+          <button id="calculateExpense">Calculate</button> <br><br>
+          <p id="expenseResult">Total Expense:</p>
+        </section>
+      </article>
+    </main>
+    <div id="editModal" class="modal">
+      <div class="modal-content">
+        <span class="close">&times;</span>
+        <h2>Edit Farmer</h2>
+        <form id="editFarmerForm">
+          <label for="edit_farmer_id">Farmer ID :</label>
+          <input type="number" id="edit_farmer_id" required  />
+
+          <label for="edit_first_name">First Name:</label>
+          <input type="text" id="edit_first_name" required />
+
+          <label for="edit_last_name">Last Name:</label>
+          <input type="text" id="edit_last_name" required />
+
+          <label for="edit_phone">Phone Number:</label>
+          <input type="tel" id="edit_phone" required />
+
+          <label for="edit_email">Email :</label>
+          <input type="email" id="edit_email" />
+
+          <label for="edit_address">Address :</label>
+          <input type="text" id="edit_address" required />
+
+          <label for="edit_region">Region:</label>
+          <input type="text" id="edit_region" required />
+
+          <label for="edit_latitude">Latitude (GPS):</label>
+          <input type="text" id="edit_latitude" required/>
+
+          <label for="edit_longitude">Longitude (GPS):</label>
+          <input type="text" id="edit_longitude" required />
+
+          <label for="edit_goods">Goods:</label>
+          <input type="text" id="edit_goods" required />
+          <button type="submit">Save Changes</button>
+        </form>
+      </div>
+    </div>
+
+    <!-- Edit Purchase Modal -->
+    <div id="editPurchaseModal" class="modal">
+      <div class="modal-content">
+        <span class="close-purchase">&times;</span>
+        <h2>Edit Purchase</h2>
+        <form id="editPurchaseForm">
+          <label for="edit_purchase_id">Purchase ID :</label>
+          <input type="number" id="edit_purchase_id" min="0" required />
+
+          <label for="edit_purchase_farmer_id">Farmer ID:</label>
+          <select id="edit_purchase_farmer_id" required>
+            <option value="">Select Farmer ID</option>
+          </select>
+
+          <label for="edit_purchase_date">Date of Purchase:</label>
+          <input type="date" id="edit_purchase_date" required />
+
+          <label for="edit_quantity">Quantity (kg):</label>
+          <input type="number" id="edit_quantity" min="0" required readonly/>
+
+          <label for="edit_price">Price per kg:</label>
+          <input type="number" id="edit_price" min="0" required  readonly/>
+
+          <label for="edit_purchase_goods">Goods:</label>
+          <select id="edit_purchase_goods" required>
+            <option value="">Select Goods</option>
+          </select>
+          <button type="submit">Save Changes</button>
+        </form>
+      </div>
+    </div>
+  </body>
+  <footer></footer>
+</html>

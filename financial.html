@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Supplier Management Module</title>
+    <link rel="stylesheet" href="financial.css" />
+    <script src="financial.js" defer></script>
+  </head>
+  <header>
+    <div class="left-side">
+      <a href="financial.html"
+        ><img class="factory-symbol" src="assets/fruit.png" alt="fruit"
+      /></a>
+      <h1 class="factory-header">Sleepless Blueberry Factory</h1>
+    </div>
+    <div class="right-side">
+      <a href="index.html"><button class="tab-btn">Farmer</button></a>
+      <a href="product.html"><button class="tab-btn">Product</button></a>
+      <a href="sales.html"><button class="tab-btn">Sales</button></a>
+      <a href="financial.html"><button class="tab-btn">Financial</button></a>
+      <a href="inventory.html"><button class="tab-btn">Inventory</button></a>
+      <a href="report.html"><button class="tab-btn">Report</button></a>
+    </div>
+  </header>
+  <body>
+    <main>
+      <aside>
+        <div class="tabs">
+          <button class="tab-btn" data-tab="financial">
+            Financial Management
+          </button>
+        </div>
+      </aside>
+      <article>
+        <section id="financial">
+          <h2>Financial Summary</h2>
+          <table id="financialTable">
+            <thead>
+              <tr>
+                <th>Money earned from Sales</th>
+                <th>Money Spent on Raw Blueberries</th>
+                <th>Revenue</th>
+                <th>Tax of Revenue(13%)</th>
+                <th>Net Profit</th>
+              </tr>
+            </thead>
+            <tbody>
+              <!-- Financial data will be dynamically inserted here -->
+            </tbody>
+          </table>
+          <br />
+          <div class="exportCSV">
+            <button id="exportCSVButton">Export to CSV</button>
+          </div>
+        </section>
+      </article>
+    </main>
+  </body>
+  <footer></footer>
+</html>

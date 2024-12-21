@@ -1,0 +1,428 @@
+* {
+  margin: 0;
+  box-sizing: border-box;
+}
+
+/* body styling */
+body {
+  margin: 0;
+  font-family: Arial, Helvetica, sans-serif;
+  background-color: #f5f5f5;
+}
+
+/* header styling with flexible layout */
+header {
+  height: auto;
+  display: flex;
+  flex-wrap: wrap; /*it allows flex items to wrap onto multiple lines */
+  background-color: rgb(69, 5, 5);
+  padding: 20px;
+  justify-content: space-between; /* Add this line */
+}
+
+.left-side {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1rem;
+}
+
+.factory-symbol {
+  width: 95px;
+  padding-bottom: 10px;
+}
+.factory-symbol {
+  width: 95px;
+  padding-bottom: 10px;
+  transition: transform 0.3s ease; /* Add transition for smooth effect */
+}
+
+.factory-symbol:hover {
+  transform: scale(1.1); /* Slightly increase the size */
+  z-index: 10; /* Bring the logo to the front */
+  box-shadow: 0 0 20px rgb(145, 255, 0); /* Add a wider pink shadow directly around the symbol */
+}
+
+.factory-header {
+  color: white;
+  margin-left: 10px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease; /* Add transition for smooth effect */
+}
+
+.factory-header:hover {
+  transform: scale(1.05); /* Slightly increase the size */
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5); /* Add a black shadow */
+}
+
+.right-side {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1rem;
+  margin: 10px 10px 10px 10px;
+}
+
+.right-side .tab-btn {
+  flex: 1; /* Make buttons take equal space */
+  text-align: center; /* Center the text inside the button */
+  min-width: 150px; /* Optional: Set a minimum width */
+  max-width: 200px; /* Optional: Set a maximum width */
+}
+
+input[type="text"],
+input[type="number"],
+input[type="email"],
+input[type="tel"],
+input[type="date"],
+select {
+  display: block;
+  width: 100%;
+  max-width: 400px;
+  margin: 10px 0;
+  padding: 10px;
+  font-size: 1rem; /*1 rem 16px*/
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: #fff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* General button styling */
+button {
+  padding: 10px 20px;
+  font-size: 1rem;
+  color: white;
+  background-color: #8a2b2b;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+button:hover {
+  transform: scale(1.01); /* Slightly increase the size */
+  box-shadow: 0 0 10px rgba(123, 42, 100, 0.2); /* Add a shadow effect */
+}
+
+main {
+  display: flex;
+  min-height: 100vh;
+}
+
+aside {
+  flex: 1;
+  background-color: rgb(87, 39, 39);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+  height: auto;
+  max-width: 200px;
+}
+article {
+  flex: 3;
+  display: flex;
+  overflow: scroll;
+}
+#farmerTab h2 {
+  margin-bottom: 20px;
+}
+
+#farmerList h1 {
+  font-size: x-large;
+  margin-bottom: 15px;
+}
+.tabs {
+  width: auto;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+}
+
+.tab-btn {
+  flex: 1; /* Make buttons take equal space */
+  width: auto;
+  padding: 15px 10px;
+  margin: 10px 0;
+  color: white;
+  background-color: #8a2b2b;
+  border: none;
+  text-align: center;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  min-width: 150px; /* Optional: Set a minimum width */
+  max-width: 200px; /* Optional: Set a maximum width */
+}
+
+.tab-btn:hover {
+  transform: scale(1.05); /* Slightly increase the size */
+  box-shadow: 0 0 10px rgb(145, 255, 0); /* Add a shadow effect */
+  background-color: #a33a3a;
+}
+
+.filtering-section {
+  display: flex;
+  gap: 30px;
+}
+
+.sorting-section {
+  display: flex;
+  gap: 10px;
+  margin: 10px 0 10px 0;
+}
+
+section {
+  flex: 1;
+  padding: 20px;
+}
+
+section {
+  display: none;
+}
+
+section.active {
+  display: block;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse; /* allows cell borders to be merged */
+  margin-top: 20px;
+}
+
+table th,
+table td {
+  text-align: left;
+  padding: 10px;
+  border: 1px solid #ccc;
+}
+
+table th {
+  background-color: #8a2b2b;
+  color: white;
+}
+
+table tbody tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+/* Modal */
+.modal {
+  display: none; /* Hidden by default */
+  position: fixed; /* Stay in place */
+  z-index: 1; /* Sit on top */
+  left: 0;
+  top: 0;
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  overflow: auto; /* Enable scroll if needed */
+  background-color: rgb(0, 0, 0); /* Fallback color */
+  background-color: rgba(0, 0, 0, 0.4); /* Black w/ opacity */
+}
+
+/* Modal Content */
+.modal-content {
+  background-color: #fefefe;
+  margin: 15% auto; /* 15% from the top and centered */
+  padding: 20px;
+  border: 1px solid #888;
+  width: 80%; /* Could be more or less, depending on screen size */
+}
+
+/* The Close Button */
+.close,
+.close-purchase {
+  color: #aaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+.close-purchase:hover,
+.close-purchase:focus,
+.close:hover,
+.close:focus {
+  color: black;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+#indexTotalBlueberries {
+  padding-top: 10px;
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-top: 10px;
+}
+
+footer {
+  width: auto;
+  height: 100px;
+  background-color: rgb(58, 26, 26);
+}
+
+.summary-section {
+  margin-top: 20px;
+}
+
+.summary-section h3 {
+  margin-bottom: 10px;
+}
+
+.summary-section select,
+.summary-section input {
+  margin-right: 10px;
+  margin-bottom: 10px;
+}
+
+#summaryResult p {
+  margin: 5px 0;
+}
+
+#expenseResult {
+  margin-top: 10px;
+  font-weight: bold;
+}
+
+.revenue-summary {
+  padding: 3px;
+  border-radius: 5px;
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+}
+
+.revenue-summary__section {
+  background-color: #510707;
+  border: 3px solid #8b0000; /* Koyu kırmızı kenar */
+  padding: 15px; /* Daha geniş bir iç boşluk */
+  margin-bottom: 10px;
+  border-radius: 5px;
+  font-size: 1.05em;
+}
+
+.revenue-summary h3 {
+  color: rgb(255, 255, 255);
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  transition: color 0.3s ease, background-color 0.3s ease;
+}
+.revenue-summary h3:hover {
+  color: #510707;
+  background-color: #ffffff;
+}
+
+.revenue-summary__title {
+  font-size: 1.2em;
+  margin-bottom: 10px;
+  color: #333;
+}
+
+.revenue-summary__list {
+  list-style-type: none;
+  padding: 0;
+}
+
+.revenue-summary__item {
+  font-size: x-large;
+  margin-bottom: 5px;
+  color: rgb(255, 255, 255);
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  transition: color 0.3s ease, background-color 0.3s ease;
+}
+
+.revenue-summary__item:hover {
+  color: #510707; /* Daha okunabilir bir yazı rengi */
+  background-color: #ffffff; /* Hover durumunda hafif daha koyu bir arka plan */
+}
+
+/* Sales Reports Styles */
+#salesReports {
+  text-align: center;
+}
+
+#salesReports h2 {
+  margin-bottom: 20px;
+}
+
+#salesReports canvas {
+  margin: 20px auto;
+  display: block;
+}
+
+#salesReports button {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  margin: 10px;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+#salesBarChart {
+  max-width: 600px;
+  max-height: 400px;
+  width: 100%;
+  height: auto;
+}
+.chart-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.exportPDF,
+.exportCSV {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#salesReports button:hover {
+  background-color: #0056b3;
+}
+@media screen and (max-width: 1080px) {
+  .table-container {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+  .tabs {
+    flex-direction: unset;
+    justify-content: space-between;
+    gap: 10px;
+  }
+
+  #farmersTable th,
+  #farmersTable td {
+    white-space: nowrap; /* İçeriğin kırılmasını önler */
+  }
+  .filtering-section {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .filter-group {
+    display: flex;
+    flex-direction: column;
+  }
+
+  aside {
+    order: 1;
+    flex: unset;
+    max-width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  article {
+    order: 2;
+    flex: unset;
+    width: auto;
+  }
+
+  main {
+    flex-direction: column;
+    min-height: 100vh;
+  }
+}
