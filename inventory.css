@@ -26,13 +26,8 @@ header {
   align-items: center;
   gap: 1rem;
 }
-
 .factory-symbol {
-  width: 95px;
-  padding-bottom: 10px;
-}
-.factory-symbol {
-  width: 95px;
+  width: 160px;
   padding-bottom: 10px;
   transition: transform 0.3s ease; /* Add transition for smooth effect */
 }

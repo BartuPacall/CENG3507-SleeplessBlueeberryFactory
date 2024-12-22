@@ -31,6 +31,8 @@ document.addEventListener("DOMContentLoaded", () => {
     JSON.parse(localStorage.getItem("categoryQuantities")) || {};
   const alerts = JSON.parse(localStorage.getItem("categoryAlerts")) || {};
   const restockDates = JSON.parse(localStorage.getItem("restockDates")) || {};
+  const premiumWeights =
+    JSON.parse(localStorage.getItem("premiumWeights")) || {};
 
   // Define category weights if not already defined
   const categoryWeights = {
@@ -56,14 +58,25 @@ document.addEventListener("DOMContentLoaded", () => {
       alertStatus = "High";
     }
 
+    let totalKilos;
+    if (category === "premium") {
+      totalKilos = (
+        (premiumWeights[category] * currentQuantity) /
+        1000
+      ).toFixed(2);
+    } else {
+      totalKilos =
+        categoryWeights[category] === 0
+          ? "N/A"
+          : ((currentQuantity * categoryWeights[category]) / 1000).toFixed(2);
+    }
+
     const row = document.createElement("tr");
     row.innerHTML = `
       <td>${id}</td>
       <td>${category}</td>
       <td>${currentQuantity}</td>
-      <td>${((currentQuantity * categoryWeights[category]) / 1000).toFixed(
-        2
-      )}</td>
+      <td>${totalKilos}</td>
       <td>${alertLevel}</td>
       <td>${restockDate}</td>
       <td>Warehouse</td>
@@ -75,7 +88,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Add event listener to export button
   document
-    .querySelector("#exportCsvBtn")
+    .querySelector("#exportCSVButton")
     .addEventListener("click", exportTableToCSV);
 });
 

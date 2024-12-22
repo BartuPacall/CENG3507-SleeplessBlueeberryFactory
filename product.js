@@ -106,6 +106,10 @@ document
 
     if (category === "premium") {
       weight = parseFloat(document.querySelector("#weight").value) * 1000; // Convert kg to grams
+      const premiumWeights =
+        JSON.parse(localStorage.getItem("premiumWeights")) || {};
+      premiumWeights[category] = weight;
+      localStorage.setItem("premiumWeights", JSON.stringify(premiumWeights));
     }
     const totalWeight = weight * quantity;
 

@@ -4,12 +4,14 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Supplier Management Module</title>
-    <link rel="stylesheet" href="inventory.css" />
-    <script src="inventory.js" defer></script>
+    <link rel="stylesheet" href="report.css" />
+    <script src="report.js" defer></script>
   </head>
   <header>
     <div class="left-side">
-      <img class="factory-symbol" src="assets/fruit.png" alt="fruit" />
+      <a href="report.html"
+        ><img class="factory-symbol" src="assets/fruit.png" alt="fruit"
+      /></a>
       <h1 class="factory-header">Sleepless Blueberry Factory</h1>
     </div>
     <div class="right-side">
@@ -29,9 +31,29 @@
         </div>
       </aside>
       <article>
-        <section id="inventoryTracking">
+        <section id="report">
           <h2>Comprehensive Report Generation Module</h2>
-
+          <br />
+          <label for="startDate">Start Date:</label>
+          <input type="date" id="startDate" />
+          <label for="endDate">End Date:</label>
+          <input type="date" id="endDate" />
+          <br />
+          <table id="financialTable">
+            <thead>
+              <tr>
+                <th>Total income from sales</th>
+                <th>Total expenses from purchases</th>
+                <th>Tax (13%) of Revenue</th>
+                <th>Profit without tax</th>
+                <th>Net Profit</th>
+              </tr>
+            </thead>
+            <tbody>
+              <!-- Our data will be dynamically inserted here -->
+            </tbody>
+          </table>
+          <br />
           <div class="exportCSV">
             <button id="exportCSVButton">Export to CSV</button>
           </div>
