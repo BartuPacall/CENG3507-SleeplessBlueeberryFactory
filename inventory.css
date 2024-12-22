@@ -247,6 +247,13 @@ table tbody tr:nth-child(even) {
   cursor: pointer;
 }
 
+#indexTotalBlueberries {
+  padding-top: 10px;
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-top: 10px;
+}
+
 footer {
   width: auto;
   height: 100px;
@@ -276,6 +283,103 @@ footer {
   font-weight: bold;
 }
 
+.revenue-summary {
+  padding: 3px;
+  border-radius: 5px;
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+}
+
+.revenue-summary__section {
+  background-color: #510707;
+  border: 3px solid #8b0000; /* Koyu kırmızı kenar */
+  padding: 15px; /* Daha geniş bir iç boşluk */
+  margin-bottom: 10px;
+  border-radius: 5px;
+  font-size: 1.05em;
+}
+
+.revenue-summary h3 {
+  color: rgb(255, 255, 255);
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  transition: color 0.3s ease, background-color 0.3s ease;
+}
+.revenue-summary h3:hover {
+  color: #510707;
+  background-color: #ffffff;
+}
+
+.revenue-summary__title {
+  font-size: 1.2em;
+  margin-bottom: 10px;
+  color: #333;
+}
+
+.revenue-summary__list {
+  list-style-type: none;
+  padding: 0;
+}
+
+.revenue-summary__item {
+  font-size: x-large;
+  margin-bottom: 5px;
+  color: rgb(255, 255, 255);
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  transition: color 0.3s ease, background-color 0.3s ease;
+}
+
+.revenue-summary__item:hover {
+  color: #510707; /* Daha okunabilir bir yazı rengi */
+  background-color: #ffffff; /* Hover durumunda hafif daha koyu bir arka plan */
+}
+
+/* Sales Reports Styles */
+#salesReports {
+  text-align: center;
+}
+
+#salesReports h2 {
+  margin-bottom: 20px;
+}
+
+#salesReports canvas {
+  margin: 20px auto;
+  display: block;
+}
+
+#salesReports button {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  margin: 10px;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+#salesBarChart {
+  max-width: 600px;
+  max-height: 400px;
+  width: 100%;
+  height: auto;
+}
+.chart-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.exportPDF,
+.exportCSV {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#salesReports button:hover {
+  background-color: #0056b3;
+}
 @media screen and (max-width: 1080px) {
   .table-container {
     overflow-x: auto;

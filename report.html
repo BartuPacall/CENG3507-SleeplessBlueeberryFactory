@@ -3,7 +3,41 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
+    <title>Supplier Management Module</title>
+    <link rel="stylesheet" href="inventory.css" />
+    <script src="inventory.js" defer></script>
   </head>
-  <body></body>
+  <header>
+    <div class="left-side">
+      <img class="factory-symbol" src="assets/fruit.png" alt="fruit" />
+      <h1 class="factory-header">Sleepless Blueberry Factory</h1>
+    </div>
+    <div class="right-side">
+      <a href="index.html"><button class="tab-btn">Farmer</button></a>
+      <a href="product.html"><button class="tab-btn">Product</button></a>
+      <a href="sales.html"><button class="tab-btn">Sales</button></a>
+      <a href="financial.html"><button class="tab-btn">Financial</button></a>
+      <a href="inventory.html"><button class="tab-btn">Inventory</button></a>
+      <a href="report.html"><button class="tab-btn">Report</button></a>
+    </div>
+  </header>
+  <body>
+    <main>
+      <aside>
+        <div class="tabs">
+          <button class="tab-btn" data-tab="report">Report</button>
+        </div>
+      </aside>
+      <article>
+        <section id="inventoryTracking">
+          <h2>Comprehensive Report Generation Module</h2>
+
+          <div class="exportCSV">
+            <button id="exportCSVButton">Export to CSV</button>
+          </div>
+        </section>
+      </article>
+    </main>
+  </body>
+  <footer></footer>
 </html>

@@ -102,6 +102,7 @@ document
     const category = document.querySelector("#category").value;
     let quantity = parseFloat(document.querySelector("#quantity").value);
     let weight = categoryWeights[category];
+    const restockDate = document.querySelector("#restockDate").value;
 
     if (category === "premium") {
       weight = parseFloat(document.querySelector("#weight").value) * 1000; // Convert kg to grams
@@ -126,6 +127,12 @@ document
         "categoryQuantities",
         JSON.stringify(categoryQuantities)
       );
+
+      // Update the restock date
+      const restockDates =
+        JSON.parse(localStorage.getItem("restockDates")) || {};
+      restockDates[category] = restockDate;
+      localStorage.setItem("restockDates", JSON.stringify(restockDates));
 
       // Update the alert status
       updateAlertStatus(category);
@@ -183,6 +190,8 @@ function updateAlertStatus(category) {
     <td>${alertStatus}</td>
   `;
 }
+
+// Function to update the alert table
 function updateAlertTable() {
   const alerts = JSON.parse(localStorage.getItem("categoryAlerts")) || {};
   const categoryQuantities =
