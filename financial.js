@@ -27,55 +27,105 @@ sections.forEach((section, index) => {
 const orders = JSON.parse(localStorage.getItem("orders")) || [];
 const purchases = JSON.parse(localStorage.getItem("purchases")) || [];
 
-// Calculate total money earned from sales
-const totalSales = orders.reduce((sum, order) => sum + order.totalPrice, 0);
+function filterDataByDate(startDate, endDate) {
+  const filteredOrders = orders.filter((order) => {
+    const orderDate = new Date(order.orderDate);
+    return orderDate >= startDate && orderDate <= endDate;
+  });
 
-// Calculate total money spent on raw blueberries
-const totalSpent = purchases.reduce(
-  (sum, purchase) => sum + purchase.totalCost,
-  0
-);
+  const filteredPurchases = purchases.filter((purchase) => {
+    const purchaseDate = new Date(purchase.purchaseDate);
+    return purchaseDate >= startDate && purchaseDate <= endDate;
+  });
 
-// Calculate total revenue
-const totalRevenue = totalSales - totalSpent;
+  return { filteredOrders, filteredPurchases };
+}
 
-// Calculate tax (13% of total revenue)
-const tax = totalRevenue * 0.13;
+function calculateFinancialSummary(filteredOrders, filteredPurchases) {
+  const totalSales = filteredOrders.reduce(
+    (sum, order) => sum + order.totalPrice,
+    0
+  );
+  const totalSpent = filteredPurchases.reduce(
+    (sum, purchase) => sum + purchase.totalCost,
+    0
+  );
+  const totalRevenue = totalSales - totalSpent;
+  const tax = totalRevenue * 0.13;
+  const netProfit = totalRevenue - tax;
 
-// Calculate net profit
-const netProfit = totalRevenue - tax;
+  return { totalSales, totalSpent, totalRevenue, tax, netProfit };
+}
 
-// Update the financial table
-const financialTableBody = document.querySelector("#financialTable tbody");
-financialTableBody.innerHTML = `
+function updateFinancialTable(summary) {
+  const financialTableBody = document.querySelector("#financialTable tbody");
+  financialTableBody.innerHTML = `
     <tr>
-      <td>$${totalSales.toFixed(2)}</td>
-      <td>$${totalSpent.toFixed(2)}</td>
-      <td>$${totalRevenue.toFixed(2)}</td>
-      <td>$${tax.toFixed(2)}</td>
-      <td>$${netProfit.toFixed(2)}</td>
+      <td>$${summary.totalSales.toFixed(2)}</td>
+      <td>$${summary.totalSpent.toFixed(2)}</td>
+      <td>$${summary.totalRevenue.toFixed(2)}</td>
+      <td>$${summary.tax.toFixed(2)}</td>
+      <td>$${summary.netProfit.toFixed(2)}</td>
     </tr>
   `;
+}
 
-// Add event listener to the export button
+document
+  .querySelector("#startDate")
+  .addEventListener("change", updateFinancialSummary);
+document
+  .querySelector("#endDate")
+  .addEventListener("change", updateFinancialSummary);
+
+function updateFinancialSummary() {
+  const startDate = new Date(document.querySelector("#startDate").value);
+  const endDate = new Date(document.querySelector("#endDate").value);
+
+  if (startDate && endDate) {
+    const { filteredOrders, filteredPurchases } = filterDataByDate(
+      startDate,
+      endDate
+    );
+    const summary = calculateFinancialSummary(
+      filteredOrders,
+      filteredPurchases
+    );
+    updateFinancialTable(summary);
+  }
+}
+
 document.querySelector("#exportCSVButton").addEventListener("click", () => {
-  const csvContent = convertToCSV([
-    [
-      "Money earned from Sales",
-      "Money Spent on Raw Blueberries",
-      "Revenue",
-      "Tax of Revenue(13%)",
-      "Net Profit",
-    ],
-    [
-      totalSales.toFixed(2),
-      totalSpent.toFixed(2),
-      totalRevenue.toFixed(2),
-      tax.toFixed(2),
-      netProfit.toFixed(2),
-    ],
-  ]);
-  downloadCSV("financial_summary.csv", csvContent);
+  const startDate = new Date(document.querySelector("#startDate").value);
+  const endDate = new Date(document.querySelector("#endDate").value);
+
+  if (startDate && endDate) {
+    const { filteredOrders, filteredPurchases } = filterDataByDate(
+      startDate,
+      endDate
+    );
+    const summary = calculateFinancialSummary(
+      filteredOrders,
+      filteredPurchases
+    );
+
+    const csvContent = convertToCSV([
+      [
+        "Money earned from Sales",
+        "Money Spent on Raw Blueberries",
+        "Revenue",
+        "Tax of Revenue(13%)",
+        "Net Profit",
+      ],
+      [
+        summary.totalSales.toFixed(2),
+        summary.totalSpent.toFixed(2),
+        summary.totalRevenue.toFixed(2),
+        summary.tax.toFixed(2),
+        summary.netProfit.toFixed(2),
+      ],
+    ]);
+    downloadCSV("financial_summary.csv", csvContent);
+  }
 });
 
 function convertToCSV(data) {

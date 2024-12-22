@@ -59,8 +59,7 @@ function calcRevenue(pricePerKg, avgPriceOfBerry, pQuantity, cKG) {
   return ((pricePerKg - avgPriceOfBerry) * (pQuantity * cKG)).toFixed(2);
 }
 
-function calculateRevenueSummary() {
-  const orders = JSON.parse(localStorage.getItem("orders")) || [];
+function calculateRevenueSummary(filteredOrders) {
   const prices = JSON.parse(localStorage.getItem("categoryPrices")) || {};
   const avgPriceOfBerry =
     parseFloat(localStorage.getItem("avgPriceOfBlueberries")) || 0;
@@ -70,7 +69,7 @@ function calculateRevenueSummary() {
   const packageSales = {};
   const packageRevenue = {};
 
-  orders.forEach((order) => {
+  filteredOrders.forEach((order) => {
     const pricePerUnit = prices[order.productCategory] || 0;
     const categoryWeights = {
       small: 0.1,
@@ -92,9 +91,6 @@ function calculateRevenueSummary() {
       )
     );
 
-    console.log("Order:", order); // Debug log
-    console.log("Revenue:", revenue); // Debug log
-
     // Add revenue to the order object
     order.revenue = revenue;
 
@@ -110,22 +106,20 @@ function calculateRevenueSummary() {
     packageRevenue[order.productCategory] += revenue;
   });
 
-  // Update orders in localStorage with revenue values
-  localStorage.setItem("orders", JSON.stringify(orders));
-
-  console.log("Revenue Summary:", {
-    totalSales,
-    totalRevenue,
-    packageSales,
-    packageRevenue,
-  }); // Debug log
-
   return { totalSales, totalRevenue, packageSales, packageRevenue };
 }
 
+let salesBarChart; // Declare a variable to hold the chart instance
+
 function renderBarChart(data, labels, chartId) {
   const ctx = document.getElementById(chartId).getContext("2d");
-  new Chart(ctx, {
+
+  // Destroy the previous chart instance if it exists
+  if (salesBarChart) {
+    salesBarChart.destroy();
+  }
+
+  salesBarChart = new Chart(ctx, {
     type: "bar",
     data: {
       labels: labels,
@@ -151,9 +145,17 @@ function renderBarChart(data, labels, chartId) {
   });
 }
 
+let revenuePieChart; // Declare a variable to hold the pie chart instance
+
 function renderPieChart(data, labels, chartId) {
   const ctx = document.getElementById(chartId).getContext("2d");
-  new Chart(ctx, {
+
+  // Destroy the previous chart instance if it exists
+  if (revenuePieChart) {
+    revenuePieChart.destroy();
+  }
+
+  revenuePieChart = new Chart(ctx, {
     type: "pie",
     data: {
       labels: labels,
@@ -184,12 +186,11 @@ function renderPieChart(data, labels, chartId) {
   });
 }
 
-function generateCharts() {
-  const orders = JSON.parse(localStorage.getItem("orders")) || [];
+function generateCharts(filteredOrders) {
   const categorySales = {};
   const categoryRevenue = {};
 
-  orders.forEach((order) => {
+  filteredOrders.forEach((order) => {
     if (!categorySales[order.productCategory]) {
       categorySales[order.productCategory] = 0;
       categoryRevenue[order.productCategory] = 0;
@@ -206,13 +207,9 @@ function generateCharts() {
   renderPieChart(revenueData, categories, "revenuePieChart");
 }
 
-document.addEventListener("DOMContentLoaded", () => {
-  generateCharts();
-});
-
-function displayRevenueSummary() {
+function displayRevenueSummary(filteredOrders) {
   const { totalSales, totalRevenue, packageSales, packageRevenue } =
-    calculateRevenueSummary();
+    calculateRevenueSummary(filteredOrders);
 
   const revenueDisplay = document.querySelector("#revenueDisplay");
   revenueDisplay.innerHTML = `
@@ -657,6 +654,14 @@ function filterOrders() {
   displayFilteredOrders(filteredOrders);
 }
 
+function filterOrdersByDate(startDate, endDate) {
+  const orders = JSON.parse(localStorage.getItem("orders")) || [];
+  return orders.filter((order) => {
+    const orderDate = new Date(order.orderDate);
+    return orderDate >= startDate && orderDate <= endDate;
+  });
+}
+
 function updateSalesTablePrices() {
   const orders = JSON.parse(localStorage.getItem("orders")) || [];
   const prices = JSON.parse(localStorage.getItem("categoryPrices")) || {};
@@ -829,37 +834,64 @@ document
   .querySelector("#exportCSVButton")
   .addEventListener("click", exportOrdersToCSV);
 
-// Function to export Revenue Calculation data to PDF
-function exportRevenueToPDF() {
-  const { totalSales, totalRevenue, packageSales, packageRevenue } =
-    calculateRevenueSummary();
+document.addEventListener("DOMContentLoaded", () => {
+  const startDateInput = document.querySelector("#startDate");
+  const endDateInput = document.querySelector("#endDate");
 
-  const { jsPDF } = window.jspdf;
-  const doc = new jsPDF();
+  function updateRevenueCalculation() {
+    const startDate = new Date(startDateInput.value);
+    const endDate = new Date(endDateInput.value);
 
-  // Add title
-  doc.setFontSize(18);
-  doc.text("Revenue Calculation", 14, 22);
-
-  // Add Total Sales and Total Revenue
-  doc.setFontSize(12);
-  doc.text(`Total Sales: ${totalSales}`, 14, 32);
-  doc.text(`Total Revenue: ${totalRevenue.toFixed(2)}`, 14, 42);
-
-  // Add a line break
-  doc.text(" ", 14, 52);
-
-  // Add package sales and revenue
-  let yPosition = 62;
-  for (const [pkg, sales] of Object.entries(packageSales)) {
-    doc.text(`Package: ${pkg}`, 14, yPosition);
-    doc.text(`Sales: ${sales}`, 80, yPosition);
-    doc.text(`Revenue: ${packageRevenue[pkg].toFixed(2)}`, 140, yPosition);
-    yPosition += 10;
+    if (startDate && endDate) {
+      const filteredOrders = filterOrdersByDate(startDate, endDate);
+      displayRevenueSummary(filteredOrders);
+      generateCharts(filteredOrders);
+    }
   }
 
-  // Save the PDF
-  doc.save("revenue_calculation.pdf");
+  startDateInput.addEventListener("change", updateRevenueCalculation);
+  endDateInput.addEventListener("change", updateRevenueCalculation);
+
+  updateRevenueCalculation(); // Initial call to display data
+});
+
+// Function to export Revenue Calculation data to PDF
+function exportRevenueToPDF() {
+  const startDate = new Date(document.querySelector("#startDate").value);
+  const endDate = new Date(document.querySelector("#endDate").value);
+
+  if (startDate && endDate) {
+    const filteredOrders = filterOrdersByDate(startDate, endDate);
+    const { totalSales, totalRevenue, packageSales, packageRevenue } =
+      calculateRevenueSummary(filteredOrders);
+
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF();
+
+    // Add title
+    doc.setFontSize(18);
+    doc.text("Revenue Calculation", 14, 22);
+
+    // Add Total Sales and Total Revenue
+    doc.setFontSize(12);
+    doc.text(`Total Sales: ${totalSales}`, 14, 32);
+    doc.text(`Total Revenue: ${totalRevenue.toFixed(2)}`, 14, 42);
+
+    // Add a line break
+    doc.text(" ", 14, 52);
+
+    // Add package sales and revenue
+    let yPosition = 62;
+    for (const [pkg, sales] of Object.entries(packageSales)) {
+      doc.text(`Package: ${pkg}`, 14, yPosition);
+      doc.text(`Sales: ${sales}`, 80, yPosition);
+      doc.text(`Revenue: ${packageRevenue[pkg].toFixed(2)}`, 140, yPosition);
+      yPosition += 10;
+    }
+
+    // Save the PDF
+    doc.save("revenue_calculation.pdf");
+  }
 }
 
 // Add event listener to the export button

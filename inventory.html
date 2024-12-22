@@ -4,8 +4,8 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Supplier Management Module</title>
-    <link rel="stylesheet" href="product.css" />
-    <script src="product.js" defer></script>
+    <link rel="stylesheet" href="inventory.css" />
+    <script src="inventory.js" defer></script>
   </head>
   <header>
     <div class="left-side">
@@ -32,16 +32,24 @@
       </aside>
       <article>
         <section id="inventoryTracking">
-          <h2>Inventory</h2>
+          <h2>Inventory Management</h2>
           <div class="table-container">
             <table id="inventoryTable">
               <thead>
                 <tr>
+                  <th>Item ID</th>
                   <th>Category</th>
-                  <th>Stock (kg)</th>
+                  <th>Stock Level</th>
+                  <th>Total Kilos</th>
+                  <th>Reorder Level</th>
+                  <th>Restock Date</th>
+                  <th>Storage Location</th>
+                  <th>Quantity Alert</th>
                 </tr>
               </thead>
-              <tbody></tbody>
+              <tbody>
+                <!-- Inventory data will be dynamically inserted here -->
+              </tbody>
             </table>
           </div>
         </section>
