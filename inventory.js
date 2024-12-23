@@ -1,6 +1,6 @@
 const tabs = document.querySelectorAll(".tab-btn");
 const sections = document.querySelectorAll("article section");
-
+// tab button click event
 tabs.forEach((tab) => {
   tab.addEventListener("click", () => {
     const target = tab.getAttribute("data-tab");
@@ -24,6 +24,7 @@ sections.forEach((section, index) => {
   }
 });
 
+// Function to show or hide the weight input field based on the selected category
 document.addEventListener("DOMContentLoaded", () => {
   const inventoryTableBody = document.querySelector("#inventoryTable tbody");
 
@@ -46,6 +47,7 @@ document.addEventListener("DOMContentLoaded", () => {
   };
 
   let id = 1;
+  // Populate the inventory table
   for (const category in categoryQuantities) {
     const currentQuantity = categoryQuantities[category];
     const alertLevel = alerts[category] || 0;
@@ -59,6 +61,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     let totalKilos;
+    // Calculate total kilos based on category
     if (category === "premium") {
       totalKilos = (
         (premiumWeights[category] * currentQuantity) /
@@ -70,7 +73,7 @@ document.addEventListener("DOMContentLoaded", () => {
           ? "N/A"
           : ((currentQuantity * categoryWeights[category]) / 1000).toFixed(2);
     }
-
+    // Create a new row in the table
     const row = document.createElement("tr");
     row.innerHTML = `
       <td>${id}</td>
@@ -95,6 +98,7 @@ document.addEventListener("DOMContentLoaded", () => {
     .addEventListener("click", exportTableToCSV);
 });
 
+// Function to update the total blueberries amount
 function updateTotalBlueberries() {
   const totalBlueberries = JSON.parse(
     localStorage.getItem("totalBlueberriesAmount")
@@ -103,6 +107,7 @@ function updateTotalBlueberries() {
     totalBlueberries.amount.toFixed(2);
 }
 
+// Function to export the inventory table to CSV
 function exportTableToCSV() {
   const table = document.querySelector("#inventoryTable");
   const rows = Array.from(table.querySelectorAll("tr"));
@@ -122,6 +127,7 @@ function exportTableToCSV() {
   )} kg`;
   const finalCsvContent = `${csvContent}\n${totalBlueberriesRow}`;
 
+  // Create a Blob object and trigger the download
   const blob = new Blob([finalCsvContent], { type: "text/csv" });
   const url = URL.createObjectURL(blob);
   const a = document.createElement("a");

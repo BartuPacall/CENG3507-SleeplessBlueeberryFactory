@@ -1,3 +1,4 @@
+// Purpose: To manage the sales module of the Blueberry Management System
 const tabs = document.querySelectorAll(".tab-btn");
 const sections = document.querySelectorAll("article section");
 
@@ -24,6 +25,7 @@ sections.forEach((section, index) => {
   }
 });
 
+// Function to show or hide the weight input field based on the selected category
 function updateAlertStatus(category) {
   const alerts = JSON.parse(localStorage.getItem("categoryAlerts")) || {};
   const alertLevel = alerts[category] || 0;
@@ -46,6 +48,7 @@ function updateAlertStatus(category) {
     row.setAttribute("data-category", category);
     tableBody.appendChild(row);
   }
+  // Update the row content
   row.innerHTML = `
     <td>${category}</td>
     <td>${alertLevel}</td>
@@ -59,16 +62,18 @@ function calcRevenue(pricePerKg, avgPriceOfBerry, pQuantity, cKG) {
   return ((pricePerKg - avgPriceOfBerry) * (pQuantity * cKG)).toFixed(2);
 }
 
+// Function to calculate revenue summary
 function calculateRevenueSummary(filteredOrders) {
   const prices = JSON.parse(localStorage.getItem("categoryPrices")) || {};
   const avgPriceOfBerry =
     parseFloat(localStorage.getItem("avgPriceOfBlueberries")) || 0;
 
+  // Initialize total sales and revenue
   let totalSales = 0;
   let totalRevenue = 0;
   const packageSales = {};
   const packageRevenue = {};
-
+  // Calculate total sales and revenue
   filteredOrders.forEach((order) => {
     const pricePerUnit = prices[order.productCategory] || 0;
     const categoryWeights = {
@@ -80,6 +85,8 @@ function calculateRevenueSummary(filteredOrders) {
       bulk: 5,
       premium: 1, // Assuming premium is already in kg
     };
+
+    // Get the weight in kg for the category
     const weightInKg = categoryWeights[order.productCategory] || 1;
     const pricePerKg = pricePerUnit / weightInKg;
     const revenue = parseFloat(
@@ -94,9 +101,10 @@ function calculateRevenueSummary(filteredOrders) {
     // Add revenue to the order object
     order.revenue = revenue;
 
+    // Update total sales and revenue
     totalSales += 1;
     totalRevenue += revenue;
-
+    // Update package sales and revenue
     if (!packageSales[order.productCategory]) {
       packageSales[order.productCategory] = 0;
       packageRevenue[order.productCategory] = 0;
@@ -139,7 +147,7 @@ function renderBarChart(data, labels, chartId) {
           beginAtZero: true,
         },
       },
-      responsive: true, // Grafiğin duyarlı olmasını sağlar
+      responsive: true, // Enable responsiveness
       maintainAspectRatio: false, // Boyutlandırma oranını serbest bırakır
     },
   });
@@ -185,11 +193,12 @@ function renderPieChart(data, labels, chartId) {
     },
   });
 }
-
+// Function to generate charts
 function generateCharts(filteredOrders) {
   const categorySales = {};
   const categoryRevenue = {};
 
+  // Calculate sales and revenue for each product category
   filteredOrders.forEach((order) => {
     if (!categorySales[order.productCategory]) {
       categorySales[order.productCategory] = 0;
@@ -199,18 +208,27 @@ function generateCharts(filteredOrders) {
     categoryRevenue[order.productCategory] += order.totalPrice;
   });
 
+  // Get the category names, sales data, and revenue data
   const categories = Object.keys(categorySales);
   const salesData = Object.values(categorySales);
   const revenueData = Object.values(categoryRevenue);
-
+  // Render the bar chart and pie chart
   renderBarChart(salesData, categories, "salesBarChart");
   renderPieChart(revenueData, categories, "revenuePieChart");
 }
 
+//  Function to calculate revenue with tax
+function calculateRevenueWithTax(revenue) {
+  const taxRate = 0.13;
+  return revenue - revenue * taxRate;
+}
+
+// Function to display revenue summary
 function displayRevenueSummary(filteredOrders) {
   const { totalSales, totalRevenue, packageSales, packageRevenue } =
     calculateRevenueSummary(filteredOrders);
 
+  // Display the revenue summary in the revenueDisplay element
   const revenueDisplay = document.querySelector("#revenueDisplay");
   revenueDisplay.innerHTML = `
     <div class="revenue-summary">
@@ -226,12 +244,15 @@ function displayRevenueSummary(filteredOrders) {
         <h3 class="revenue-summary__title">Package Sales:</h3>
         <ul class="revenue-summary__list">
           ${Object.keys(packageSales)
-            .map(
-              (pkg) =>
-                `<li class="revenue-summary__item">${pkg}: ${
-                  packageSales[pkg]
-                } sold, Revenue: ${packageRevenue[pkg].toFixed(2)}</li>`
-            )
+            .map((pkg) => {
+              const revenue = packageRevenue[pkg];
+              const revenueWithTax = calculateRevenueWithTax(revenue);
+              return `<li class="revenue-summary__item">${pkg}: ${
+                packageSales[pkg]
+              } sold, Revenue: ${revenue.toFixed(
+                2
+              )}, Revenue with Tax: ${revenueWithTax.toFixed(2)}</li>`;
+            })
             .join("")}
         </ul>
       </div>
@@ -253,6 +274,7 @@ function hasSufficientProduct(category, quantity) {
   return categoryQuantities[category] >= quantity;
 }
 
+// Function to update the balance display
 function updateBalanceDisplay() {
   const balance = parseFloat(localStorage.getItem("balance")) || 0;
   document.querySelector("#currentBalance").textContent = balance.toFixed(2);
@@ -294,9 +316,10 @@ document
     event.target.reset();
   });
 
+// Call updateBalanceDisplay when the page loads
 document.querySelector("#orderForm").addEventListener("submit", (event) => {
   event.preventDefault();
-
+  // Function to add an order
   const orderId = document.querySelector("#orderId").value;
   const customerName = document.querySelector("#customerName").value;
   const contactInfo = document.querySelector("#contactInfo").value;
@@ -321,6 +344,7 @@ document.querySelector("#orderForm").addEventListener("submit", (event) => {
   };
   productCategory = categoryMap[productCategory] || productCategory;
 
+  // Validate the form inputs
   console.log("Order Details:", {
     orderId,
     customerName,
@@ -409,6 +433,7 @@ document.addEventListener("DOMContentLoaded", () => {
   updateSalesTablePrices();
 });
 
+// Function to display an order in the orders table
 function displayOrder(order) {
   const tableBody = document.querySelector("#ordersTable tbody");
   const row = document.createElement("tr");
@@ -426,8 +451,10 @@ function displayOrder(order) {
     xlarge: 1,
     family: 2,
     bulk: 5,
-    premium: 1, // Assuming premium is already in kg
+    premium: 1,
   };
+
+  // Get the weight in kg for the category
   const weightInKg = categoryWeights[order.productCategory] || 1;
   const pricePerKg = pricePerUnit / weightInKg;
 
@@ -443,6 +470,7 @@ function displayOrder(order) {
     weightInKg
   );
 
+  // Display the order details in the orders table
   row.innerHTML = `
     <td>${order.orderId}</td>
     <td>${order.customerName}</td>
@@ -492,12 +520,12 @@ function openUpdateModal(orderId) {
     modal.style.display = "block";
   }
 }
-
+// Function to close the update modal
 function closeUpdateModal() {
   const modal = document.querySelector("#updateOrderModal");
   modal.style.display = "none";
 }
-
+// Add event listener for the update order form
 document
   .querySelector("#updateOrderForm")
   .addEventListener("submit", (event) => {
@@ -515,6 +543,7 @@ document
     const quantityOrdered = parseFloat(
       document.querySelector("#updateQuantityOrdered").value
     );
+    // Get the order status and date
     const orderStatus = document.querySelector("#updateOrderStatus").value;
     const orderDate = document.querySelector("#updateOrderDate").value; // Get the date value
 
@@ -539,7 +568,7 @@ document
     // Update the order object
     const orders = JSON.parse(localStorage.getItem("orders")) || [];
     const orderIndex = orders.findIndex((order) => order.orderId === orderId);
-
+    // Update the order object
     if (orderIndex !== -1) {
       orders[orderIndex] = {
         orderId,
@@ -577,12 +606,14 @@ document
     }
   });
 
+// Function to update the product quantities in localStorage
 function updateProductQuantities(category, quantity) {
   const categoryQuantities =
     JSON.parse(localStorage.getItem("categoryQuantities")) || {};
   console.log("Current Quantities:", categoryQuantities); // Debug log
   console.log("Category:", category, "Quantity:", quantity); // Debug log
 
+  // Check if there are enough products in stock
   if (categoryQuantities[category] >= quantity) {
     categoryQuantities[category] -= quantity;
     localStorage.setItem(
@@ -620,6 +651,7 @@ document
   .querySelector("#filterCategory")
   .addEventListener("change", filterOrders);
 
+// Function to filter orders based on search and filter inputs
 function filterOrders() {
   const searchValue = document
     .querySelector("#searchInput")
@@ -652,6 +684,7 @@ function filterOrders() {
   displayFilteredOrders(filteredOrders);
 }
 
+// Function to filter orders by date
 function filterOrdersByDate(startDate, endDate) {
   const orders = JSON.parse(localStorage.getItem("orders")) || [];
   return orders.filter((order) => {
@@ -660,6 +693,7 @@ function filterOrdersByDate(startDate, endDate) {
   });
 }
 
+// Function to update the sales table prices
 function updateSalesTablePrices() {
   const orders = JSON.parse(localStorage.getItem("orders")) || [];
   const prices = JSON.parse(localStorage.getItem("categoryPrices")) || {};
@@ -712,7 +746,7 @@ function displayFilteredOrders(orders) {
       order.quantityOrdered,
       weightInKg
     );
-
+    // Display the order details in the orders table
     row.innerHTML = `
       <td>${order.orderId}</td>
       <td>${order.customerName}</td>
@@ -735,13 +769,13 @@ function displayFilteredOrders(orders) {
       .addEventListener("click", () => openUpdateModal(order.orderId));
   });
 }
-
+// Function to load orders from localStorage
 function loadOrders() {
   const orders = JSON.parse(localStorage.getItem("orders")) || [];
   populateFilterDropdowns(orders);
   displayFilteredOrders(orders);
 }
-
+// Function to populate filter dropdowns
 function populateFilterDropdowns(orders) {
   const customerSet = new Set();
   const categorySet = new Set();
@@ -751,12 +785,13 @@ function populateFilterDropdowns(orders) {
     categorySet.add(order.productCategory);
   });
 
+  // Update the filter dropdowns
   const filterCustomer = document.querySelector("#filterCustomer");
   const filterCategory = document.querySelector("#filterCategory");
 
   filterCustomer.innerHTML = '<option value="">All Customers</option>';
   filterCategory.innerHTML = '<option value="">All Categories</option>';
-
+  // Populate the filter dropdowns
   customerSet.forEach((customer) => {
     const option = document.createElement("option");
     option.value = customer;
@@ -764,6 +799,7 @@ function populateFilterDropdowns(orders) {
     filterCustomer.appendChild(option);
   });
 
+  // Populate the category dropdown
   categorySet.forEach((category) => {
     const option = document.createElement("option");
     option.value = category;
@@ -832,6 +868,7 @@ document
   .querySelector("#exportCSVButton")
   .addEventListener("click", exportOrdersToCSV);
 
+// Function to update the price table
 document.addEventListener("DOMContentLoaded", () => {
   const startDateInput = document.querySelector("#startDate");
   const endDateInput = document.querySelector("#endDate");
@@ -846,7 +883,7 @@ document.addEventListener("DOMContentLoaded", () => {
       generateCharts(filteredOrders);
     }
   }
-
+  // Add event listeners to the date inputs
   startDateInput.addEventListener("change", updateRevenueCalculation);
   endDateInput.addEventListener("change", updateRevenueCalculation);
 
@@ -857,7 +894,7 @@ document.addEventListener("DOMContentLoaded", () => {
 function exportRevenueToPDF() {
   const startDate = new Date(document.querySelector("#startDate").value);
   const endDate = new Date(document.querySelector("#endDate").value);
-
+  // Function to export Revenue Calculation data to PDF
   if (startDate && endDate) {
     const filteredOrders = filterOrdersByDate(startDate, endDate);
     const { totalSales, totalRevenue, packageSales, packageRevenue } =
@@ -885,9 +922,17 @@ function exportRevenueToPDF() {
     // Add package sales and revenue
     let yPosition = 82;
     for (const [pkg, sales] of Object.entries(packageSales)) {
+      const revenue = packageRevenue[pkg];
+      const revenueWithTax = calculateRevenueWithTax(revenue);
       doc.text(`Package: ${pkg}`, 14, yPosition);
       doc.text(`Sales: ${sales}`, 80, yPosition);
-      doc.text(`Revenue: ${packageRevenue[pkg].toFixed(2)}`, 140, yPosition);
+      doc.text(`Revenue: ${revenue.toFixed(2)}`, 140, yPosition);
+      yPosition += 10;
+      doc.text(
+        `Revenue with Tax: ${revenueWithTax.toFixed(2)}`,
+        140,
+        yPosition
+      );
       yPosition += 10;
     }
 

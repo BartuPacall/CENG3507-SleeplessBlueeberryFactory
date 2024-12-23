@@ -1,3 +1,4 @@
+// Purpose: To handle the report page functionality
 const tabs = document.querySelectorAll(".tab-btn");
 const sections = document.querySelectorAll("article section");
 
@@ -24,18 +25,22 @@ sections.forEach((section, index) => {
   }
 });
 
+// Function to show or hide the weight input field based on the selected category
 document.addEventListener("DOMContentLoaded", () => {
   updateFinancialSummary();
   updateInventoryTable();
 });
 
+// Update the financial summary and inventory table
 function updateInventoryTable() {
   const startDate = new Date(document.querySelector("#startDate").value);
   const endDate = new Date(document.querySelector("#endDate").value);
 
+  // Get the data from local storage
   const inventoryTableBody = document.querySelector("#inventoryTable tbody");
   inventoryTableBody.innerHTML = "";
 
+  // Get the data from local storage
   const categoryQuantities =
     JSON.parse(localStorage.getItem("categoryQuantities")) || {};
   const alerts = JSON.parse(localStorage.getItem("categoryAlerts")) || {};
@@ -45,6 +50,7 @@ function updateInventoryTable() {
   const orders = JSON.parse(localStorage.getItem("orders")) || [];
   const purchases = JSON.parse(localStorage.getItem("purchases")) || [];
 
+  // Category weights in grams
   const categoryWeights = {
     small: 100,
     medium: 250,
@@ -69,6 +75,7 @@ function updateInventoryTable() {
   }, {});
 
   let id = 1;
+  // Create a row for each category
   for (const category in categoryQuantities) {
     const currentQuantity = categoryQuantities[category];
     const alertLevel = alerts[category] || 0;
@@ -82,6 +89,7 @@ function updateInventoryTable() {
       alertStatus = "High";
     }
 
+    //  Calculate the total kilos for each category
     let totalKilos;
     if (category === "premium") {
       totalKilos = (
@@ -95,6 +103,7 @@ function updateInventoryTable() {
           : ((currentQuantity * categoryWeights[category]) / 1000).toFixed(2);
     }
 
+    // Create a row for each category
     const row = document.createElement("tr");
     row.innerHTML = `
       <td>${id}</td>
@@ -118,6 +127,7 @@ function updateInventoryTable() {
   updateRestockDate();
 }
 
+// Update the total blueberries amount
 function updateTotalBlueberries() {
   const totalBlueberries = JSON.parse(
     localStorage.getItem("totalBlueberriesAmount")
@@ -126,6 +136,7 @@ function updateTotalBlueberries() {
     totalBlueberries.amount.toFixed(2);
 }
 
+// we update the restock date display
 function updateRestockDate() {
   const purchases = JSON.parse(localStorage.getItem("purchases")) || [];
   if (purchases.length > 0) {
@@ -140,10 +151,12 @@ function updateRestockDate() {
   }
 }
 
+// Update the financial summary
 function updateFinancialSummary() {
   const startDate = new Date(document.querySelector("#startDate").value);
   const endDate = new Date(document.querySelector("#endDate").value);
 
+  // Filter orders and purchases by date range
   if (startDate && endDate) {
     const { filteredOrders, filteredPurchases } = filterDataByDate(
       startDate,
@@ -157,7 +170,9 @@ function updateFinancialSummary() {
   }
 }
 
+//  Calculate the financial summary
 function calculateFinancialSummary(filteredOrders, filteredPurchases) {
+  // Calculate the total sales, total spent, total revenue, tax, profit without tax, and net profit
   const totalSales = filteredOrders.reduce(
     (sum, order) => sum + order.totalPrice,
     0
@@ -181,6 +196,7 @@ function calculateFinancialSummary(filteredOrders, filteredPurchases) {
   };
 }
 
+// Update the financial table
 function updateFinancialTable(summary) {
   const financialTableBody = document.querySelector("#financialTable tbody");
   financialTableBody.innerHTML = `
@@ -194,24 +210,29 @@ function updateFinancialTable(summary) {
   `;
 }
 
+// Event listeners for the date range inputs
 document.querySelector("#startDate").addEventListener("change", () => {
   updateFinancialSummary();
   updateInventoryTable();
 });
+
 document.querySelector("#endDate").addEventListener("change", () => {
   updateFinancialSummary();
   updateInventoryTable();
 });
 
+// Filter the data by date range
 function filterDataByDate(startDate, endDate) {
   const orders = JSON.parse(localStorage.getItem("orders")) || [];
   const purchases = JSON.parse(localStorage.getItem("purchases")) || [];
 
+  // Filter orders and purchases by date range
   const filteredOrders = orders.filter((order) => {
     const orderDate = new Date(order.orderDate);
     return orderDate >= startDate && orderDate <= endDate;
   });
 
+  // Filter purchases by date range
   const filteredPurchases = purchases.filter((purchase) => {
     const purchaseDate = new Date(purchase.purchaseDate);
     return purchaseDate >= startDate && purchaseDate <= endDate;
@@ -219,14 +240,18 @@ function filterDataByDate(startDate, endDate) {
 
   return { filteredOrders, filteredPurchases };
 }
+
+// Export the report to a CSV file
 document.querySelector("#exportCSVButton").addEventListener("click", () => {
   const startDate = new Date(document.querySelector("#startDate").value);
   const endDate = new Date(document.querySelector("#endDate").value);
 
+  // Get the data from the financial and inventory tables
   if (startDate && endDate) {
     const financialData = getTableData("#financialTable");
     const inventoryData = getTableData("#inventoryTable");
 
+    // Create the CSV content
     const csvContent = convertToCSV([
       ["Financial Report"],
       [
@@ -269,6 +294,7 @@ document.querySelector("#exportCSVButton").addEventListener("click", () => {
   }
 });
 
+// Get the data from the table
 function getTableData(tableSelector) {
   const table = document.querySelector(tableSelector);
   const rows = Array.from(table.querySelectorAll("tbody tr"));
@@ -278,10 +304,12 @@ function getTableData(tableSelector) {
   });
 }
 
+// Convert the data to CSV format
 function convertToCSV(data) {
   return data.map((row) => row.join(",")).join("\n");
 }
 
+// Download the CSV file
 function downloadCSV(filename, csvContent) {
   const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
   const url = URL.createObjectURL(blob);

@@ -4,9 +4,10 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Supplier Management Module</title>
-    <link rel="stylesheet" href="financial.css" />
+    <link rel="stylesheet" href="style.css" />
     <script src="financial.js" defer></script>
   </head>
+  <!--this is the header of the page-->
   <header>
     <div class="left-side">
       <a href="financial.html"
@@ -14,6 +15,7 @@
       /></a>
       <h1 class="factory-header">Sleepless Blueberry Factory</h1>
     </div>
+    <!--this is the right side of the header-->
     <div class="right-side">
       <a href="index.html"><button class="tab-btn">Farmer</button></a>
       <a href="product.html"><button class="tab-btn">Product</button></a>
@@ -26,6 +28,7 @@
   <body>
     <main>
       <aside>
+        <!--this is the tabs section-->
         <div class="tabs">
           <button class="tab-btn" data-tab="financial">
             Financial Management
@@ -33,15 +36,14 @@
         </div>
       </aside>
       <article>
+        <!--this is the financial section-->
         <section id="financial">
           <h2>Financial Summary</h2>
           <label for="startDate">Start Date:</label>
           <input type="date" id="startDate" required />
           <label for="endDate">End Date:</label>
           <input type="date" id="endDate" required />
-          <div class="exportCSV">
-            <button id="exportCSVButton">Export to CSV</button>
-          </div>
+          <button id="exportCSVButton">Export to CSV</button>
           <table id="financialTable">
             <thead>
               <tr>

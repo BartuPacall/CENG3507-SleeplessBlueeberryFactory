@@ -1,3 +1,4 @@
+// Purpose: To manage the product page functionality
 const tabs = document.querySelectorAll(".tab-btn");
 const sections = document.querySelectorAll("article section");
 
@@ -36,6 +37,7 @@ function toggleWeightInput() {
   }
 }
 
+// Initially hide the weight input field
 const totalBlueberries = JSON.parse(
   localStorage.getItem("totalBlueberriesAmount")
 );
@@ -55,6 +57,7 @@ const categoryWeights = {
   premium: 0,
 };
 
+// Update the weight input field visibility
 document.querySelector("#priceForm").addEventListener("submit", (event) => {
   event.preventDefault();
 
@@ -99,6 +102,7 @@ document
   .addEventListener("submit", (event) => {
     event.preventDefault();
 
+    // Get the form values
     const category = document.querySelector("#category").value;
     let quantity = parseFloat(document.querySelector("#quantity").value);
     let weight = categoryWeights[category];
@@ -113,6 +117,7 @@ document
     }
     const totalWeight = weight * quantity;
 
+    // Update the total blueberries amount
     if (totalBlueberries.amount >= totalWeight / 1000) {
       totalBlueberries.amount -= totalWeight / 1000;
       localStorage.setItem(
@@ -152,6 +157,7 @@ document
 document.querySelector("#alertForm").addEventListener("submit", (event) => {
   event.preventDefault();
 
+  // Get the form values
   const category = document.querySelector("#alertCategory").value;
   const alertLevel = parseFloat(document.querySelector("#alertQuantity").value);
 
@@ -208,9 +214,11 @@ function updateAlertTable() {
       continue; // Skip rawBlueberry
     }
 
+    // Get the alert level and current quantity
     const alertLevel = alerts[category];
     const currentQuantity = categoryQuantities[category] || 0;
 
+    // Determine the alert status
     let alertStatus = "Normal";
     if (currentQuantity < alertLevel) {
       alertStatus = "Low";
@@ -218,12 +226,14 @@ function updateAlertTable() {
       alertStatus = "High";
     }
 
+    // Update the alert table
     let row = tableBody.querySelector(`tr[data-category="${category}"]`);
     if (!row) {
       row = document.createElement("tr");
       row.setAttribute("data-category", category);
       tableBody.appendChild(row);
     }
+    // Update the row content
     row.innerHTML = `
       <td>${category}</td>
       <td>${alertLevel}</td>

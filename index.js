@@ -3,12 +3,12 @@ const sections = document.querySelectorAll("article section");
 
 tabButtons.forEach((button) => {
   button.addEventListener("click", () => {
-    // Tüm bölümleri gizle
+    // Remove the active class from all buttons
     sections.forEach((section) => {
       section.classList.remove("active");
     });
 
-    // İlgili bölümü görünür yap
+    // Add the active class to the clicked button
     const targetTab = button.getAttribute("data-tab");
     const targetSection = document.querySelector(`#${targetTab}`);
     if (targetSection) {
@@ -21,7 +21,7 @@ if (sections.length > 0) {
   sections[0].classList.add("active");
 }
 
-// Local Storage'dan farmerları yükle
+// Load farmers from local storage
 const loadFarmers = () => {
   const farmers = JSON.parse(localStorage.getItem("farmers")) || [];
   const tableBody = document.querySelector("#farmersTable tbody");
@@ -39,6 +39,7 @@ const loadFarmers = () => {
   const locations = new Set();
   const goodsSet = new Set();
 
+  // Add farmers to the table
   farmers.forEach((farmer, index) => {
     const row = document.createElement("tr");
     row.innerHTML = `
@@ -60,12 +61,14 @@ const loadFarmers = () => {
     locations.add(farmer.region);
     goodsSet.add(farmer.goods);
 
+    // Add farmer ID to the purchase farmer filter
     const option = document.createElement("option");
     option.value = farmer.farmer_id;
     option.textContent = farmer.farmer_id;
     purchaseFarmerFilter.appendChild(option);
   });
 
+  // Add farmer names, locations, and goods to the filters
   farmerNames.forEach((name) => {
     const option = document.createElement("option");
     option.value = name;
@@ -90,6 +93,7 @@ const loadFarmers = () => {
   addEventListeners();
 };
 
+// Filter farmers based on the selected filters
 const filterFarmers = () => {
   const farmers = JSON.parse(localStorage.getItem("farmers")) || [];
   const tableBody = document.querySelector("#farmersTable tbody");
@@ -114,6 +118,7 @@ const filterFarmers = () => {
     );
   });
 
+  // Add filtered farmers to the table
   filteredFarmers.forEach((farmer, index) => {
     const row = document.createElement("tr");
     row.innerHTML = `
@@ -136,14 +141,16 @@ const filterFarmers = () => {
   addEventListeners(filteredFarmers);
 };
 
+// Delete farmer by index
 const deleteFarmer = (index) => {
   const farmers = JSON.parse(localStorage.getItem("farmers")) || [];
   farmers.splice(index, 1);
   localStorage.setItem("farmers", JSON.stringify(farmers));
-  loadFarmers();
+  loadFarmers(); // Reload farmers to reflect changes
   loadPurchases(); // Reload purchases to reflect changes in farmer IDs
 };
 
+// Add event listeners for delete and update buttons
 const addEventListeners = (
   farmers = JSON.parse(localStorage.getItem("farmers")) || []
 ) => {
@@ -156,7 +163,7 @@ const addEventListeners = (
     });
   });
 
-  // Update butonlarına olay dinleyici ekle
+  // Add event listeners for update buttons
   const updateButtons = document.querySelectorAll(".update-btn");
   updateButtons.forEach((button) => {
     button.addEventListener("click", (event) => {
@@ -166,6 +173,7 @@ const addEventListeners = (
   });
 };
 
+// Add event listeners for delete and update buttons
 document
   .querySelector("#farmerFilter")
   .addEventListener("change", filterFarmers);
@@ -176,7 +184,7 @@ document.querySelector("#nameSearch").addEventListener("input", filterFarmers);
 
 loadFarmers();
 
-// Yeni farmer ekle
+// Add farmer to the local storage
 const farmerForm = document.querySelector("#farmerForm");
 farmerForm.addEventListener("submit", (event) => {
   event.preventDefault();
@@ -196,7 +204,7 @@ farmerForm.addEventListener("submit", (event) => {
 
   const farmers = JSON.parse(localStorage.getItem("farmers")) || [];
 
-  // Aynı ID'ye sahip bir kullanıcı olup olmadığını kontrol et
+  // Check for duplicate farmer ID
   const existingFarmer = farmers.find(
     (farmer) => farmer.farmer_id === newFarmer.farmer_id
   );
@@ -212,7 +220,7 @@ farmerForm.addEventListener("submit", (event) => {
   farmerForm.reset();
 });
 
-// Modal penceresini açma işlevi
+// Open edit modal window
 const openEditModal = (index, farmers) => {
   const farmer = farmers[index];
 
@@ -230,7 +238,7 @@ const openEditModal = (index, farmers) => {
   const modal = document.querySelector("#editModal");
   modal.style.display = "block";
 
-  // Modal kapatma işlevi
+  // Close modal function
   const closeModal = () => {
     modal.style.display = "none";
   };
@@ -242,7 +250,7 @@ const openEditModal = (index, farmers) => {
     }
   });
 
-  // Farmer'ı güncelleme işlevi
+  // Update goods options when farmer is changed in the edit modal
   const editFarmerForm = document.querySelector("#editFarmerForm");
   editFarmerForm.onsubmit = (event) => {
     event.preventDefault();
@@ -295,12 +303,12 @@ const openEditModal = (index, farmers) => {
   };
 };
 
-// Modal penceresini kapatma işlevi
 const closeModal = () => {
   const modal = document.querySelector("#editModal");
   modal.style.display = "none";
 };
 
+// Close modal when the close button is clicked
 document.querySelector(".close").addEventListener("click", closeModal);
 window.addEventListener("click", (event) => {
   const modal = document.querySelector("#editModal");
@@ -326,6 +334,7 @@ const loadPurchases = (sortField = null, sortOrder = "asc") => {
     });
   }
 
+  // Add purchase records to the table
   purchases.forEach((purchase, index) => {
     const farmer = farmers.find(
       (farmer) => farmer.farmer_id === purchase.farmerId
@@ -461,7 +470,7 @@ const openEditPurchaseModal = (index) => {
   };
 };
 
-// Verileri CSV formatına dönüştür ve indir
+// Convert farmers data to CSV and export
 const exportFarmersToCSV = () => {
   const farmers = JSON.parse(localStorage.getItem("farmers")) || [];
 
@@ -470,7 +479,7 @@ const exportFarmersToCSV = () => {
     return;
   }
 
-  // CSV başlıklarını tanımlayın
+  // Determine the CSV headers
   const headers = [
     "Farmer ID",
     "First Name",
@@ -484,9 +493,9 @@ const exportFarmersToCSV = () => {
     "Goods",
   ];
 
-  // CSV içeriğini oluştur
+  // Create the CSV content
   const csvContent = [
-    headers.join(","), // Başlık satırı
+    headers.join(","), // CSV header
     ...farmers.map((farmer) =>
       [
         farmer.farmer_id,
@@ -503,7 +512,7 @@ const exportFarmersToCSV = () => {
     ),
   ].join("\n");
 
-  // CSV dosyasını oluştur
+  // Create a Blob object for the CSV content
   const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
   const url = URL.createObjectURL(blob);
 
@@ -516,13 +525,14 @@ const exportFarmersToCSV = () => {
   document.body.removeChild(link);
 };
 
-// Export butonu ekleme
+// Add export button to the farmers list
 const exportButton = document.createElement("button");
 exportButton.textContent = "Export Farmers to CSV";
 exportButton.style.marginTop = "10px";
 document.querySelector("#farmerList").appendChild(exportButton);
 exportButton.addEventListener("click", exportFarmersToCSV);
 
+// Calculate the total amount of blueberries purchased
 const totalBlueberriesAmount = JSON.parse(
   localStorage.getItem("totalBlueberriesAmount")
 ) ?? { amount: 0 };
@@ -532,6 +542,7 @@ const purchaseForm = document.querySelector("#purchaseForm");
 purchaseForm.addEventListener("submit", (event) => {
   event.preventDefault();
 
+  // Create a new purchase object
   const newPurchase = {
     purchaseId: document.querySelector("#purchaseId").value,
     farmerId: document.querySelector("#purchaseFarmerFilter").value,
@@ -554,7 +565,7 @@ purchaseForm.addEventListener("submit", (event) => {
     alert("A purchase with the same ID already exists.");
     return;
   }
-
+  // Add the new purchase to the purchases array
   purchases.push(newPurchase);
   localStorage.setItem("purchases", JSON.stringify(purchases));
 
@@ -575,6 +586,7 @@ purchaseForm.addEventListener("submit", (event) => {
   purchaseForm.reset();
 });
 
+// Add event listeners for purchase filters
 document.querySelector("#sortPurchaseDate").addEventListener("click", () => {
   loadPurchases("purchaseDate");
 });
@@ -589,6 +601,7 @@ document.querySelector("#sortPurchaseAmount").addEventListener("click", () => {
 
 loadPurchases();
 
+// Generate purchase summary
 const generatePurchaseSummary = () => {
   const summaryType = document.querySelector("#summaryType").value;
   const summaryResult = document.querySelector("#summaryResult");
@@ -614,6 +627,7 @@ const generatePurchaseSummary = () => {
       );
     });
 
+    // create a summary for each farmer
     for (const farmerId in summaryData) {
       const farmer = farmers.find((f) => f.farmer_id === farmerId);
       const farmerName = farmer
@@ -631,6 +645,7 @@ const generatePurchaseSummary = () => {
     );
     const endDate = new Date(document.querySelector("#summaryEndDate").value);
 
+    // create a summary for each date
     purchases.forEach((purchase) => {
       const purchaseDate = new Date(purchase.purchaseDate);
       if (purchaseDate >= startDate && purchaseDate <= endDate) {
@@ -656,12 +671,13 @@ const generatePurchaseSummary = () => {
   }
 };
 
+// Calculate the total amount of blueberries purchased
 const calculateTotalBlueberries = () => {
   const totalBlueberries = JSON.parse(
     localStorage.getItem("totalBlueberriesAmount")
   ) || { amount: 0 };
 
-  // Total blueberry sayısını ekrana yazdır
+  // Display the total amount of blueberries
   const blueberryDisplay = document.querySelector("#indexTotalBlueberries");
   if (blueberryDisplay) {
     blueberryDisplay.textContent = `Total Blueberries: ${totalBlueberries.amount.toFixed(
@@ -670,13 +686,13 @@ const calculateTotalBlueberries = () => {
   }
 };
 
-// Sayfa yüklendiğinde hesaplama
 calculateTotalBlueberries();
 
 document
   .querySelector("#generateSummary")
   .addEventListener("click", generatePurchaseSummary);
 
+// Calculate the total expenses
 const calculateTotalExpenses = () => {
   const startDate = new Date(document.querySelector("#startDate").value);
   const endDate = new Date(document.querySelector("#endDate").value);
@@ -732,8 +748,6 @@ function calculateAvgPriceOfBlueberries() {
 // Calculate the average price of blueberries and store it in localStorage
 const avgPriceOfBlueberries = calculateAvgPriceOfBlueberries();
 localStorage.setItem("avgPriceOfBlueberries", avgPriceOfBlueberries.toFixed(2));
-
-// ...existing code...
 
 document
   .querySelector("#purchaseFarmerFilter")

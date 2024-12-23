@@ -1,6 +1,6 @@
 const tabs = document.querySelectorAll(".tab-btn");
 const sections = document.querySelectorAll("article section");
-
+// Event listener for tabs
 tabs.forEach((tab) => {
   tab.addEventListener("click", () => {
     const target = tab.getAttribute("data-tab");
@@ -27,6 +27,7 @@ sections.forEach((section, index) => {
 const orders = JSON.parse(localStorage.getItem("orders")) || [];
 const purchases = JSON.parse(localStorage.getItem("purchases")) || [];
 
+// Function to filter data by date
 function filterDataByDate(startDate, endDate) {
   const filteredOrders = orders.filter((order) => {
     const orderDate = new Date(order.orderDate);
@@ -41,6 +42,7 @@ function filterDataByDate(startDate, endDate) {
   return { filteredOrders, filteredPurchases };
 }
 
+// Function to calculate financial summary
 function calculateFinancialSummary(filteredOrders, filteredPurchases) {
   const totalSales = filteredOrders.reduce(
     (sum, order) => sum + order.totalPrice,
@@ -57,6 +59,7 @@ function calculateFinancialSummary(filteredOrders, filteredPurchases) {
   return { totalSales, totalSpent, totalRevenue, tax, netProfit };
 }
 
+// Initial update of financial summary
 function updateFinancialTable(summary) {
   const financialTableBody = document.querySelector("#financialTable tbody");
   financialTableBody.innerHTML = `
@@ -70,6 +73,7 @@ function updateFinancialTable(summary) {
   `;
 }
 
+// Event listeners for date inputs
 document
   .querySelector("#startDate")
   .addEventListener("change", updateFinancialSummary);
@@ -94,6 +98,7 @@ function updateFinancialSummary() {
   }
 }
 
+// Initial update of financial summary
 document.querySelector("#exportCSVButton").addEventListener("click", () => {
   const startDate = new Date(document.querySelector("#startDate").value);
   const endDate = new Date(document.querySelector("#endDate").value);
@@ -128,10 +133,12 @@ document.querySelector("#exportCSVButton").addEventListener("click", () => {
   }
 });
 
+// Function to convert data to CSV format
 function convertToCSV(data) {
   return data.map((row) => row.join(",")).join("\n");
 }
 
+// Function to download CSV file
 function downloadCSV(filename, csvContent) {
   const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
   const url = URL.createObjectURL(blob);

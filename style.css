@@ -20,6 +20,7 @@ header {
   justify-content: space-between; /* Add this line */
 }
 
+/* left-side of the header */
 .left-side {
   display: flex;
   flex-wrap: wrap;
@@ -27,29 +28,34 @@ header {
   gap: 1rem;
 }
 
+/* header symbol styling */
 .factory-symbol {
   width: 160px;
   padding-bottom: 10px;
   transition: transform 0.3s ease; /* Add transition for smooth effect */
 }
 
+/* add hover effect to the logo */
 .factory-symbol:hover {
-  transform: scale(1.1); /* Slightly increase the size */
-  z-index: 10; /* Bring the logo to the front */
-  box-shadow: 0 0 20px rgb(145, 255, 0); /* Add a wider pink shadow directly around the symbol */
+  transform: scale(1.1); /* slightly increase the size */
+  z-index: 10;
+  box-shadow: 0 0 20px rgb(145, 255, 0); /* add a shadow effect */
 }
 
+/* header title styling */
 .factory-header {
   color: white;
   margin-left: 10px;
   transition: transform 0.3s ease, box-shadow 0.3s ease; /* Add transition for smooth effect */
 }
 
+/* add hover effect to the title */
 .factory-header:hover {
   transform: scale(1.05); /* Slightly increase the size */
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.5); /* Add a black shadow */
 }
 
+/* right-side of the header */
 .right-side {
   display: flex;
   flex-wrap: wrap;
@@ -58,13 +64,15 @@ header {
   margin: 10px 10px 10px 10px;
 }
 
+/* header button styling */
 .right-side .tab-btn {
-  flex: 1; /* Make buttons take equal space */
-  text-align: center; /* Center the text inside the button */
-  min-width: 150px; /* Optional: Set a minimum width */
-  max-width: 200px; /* Optional: Set a maximum width */
+  flex: 1; /* make buttons take equal space */
+  text-align: center;
+  min-width: 150px;
+  max-width: 200px;
 }
 
+/* add hover effect to the buttons */
 input[type="text"],
 input[type="number"],
 input[type="email"],
@@ -96,15 +104,17 @@ button {
 }
 
 button:hover {
-  transform: scale(1.01); /* Slightly increase the size */
-  box-shadow: 0 0 10px rgba(123, 42, 100, 0.2); /* Add a shadow effect */
+  transform: scale(1.01);
+  box-shadow: 0 0 10px rgba(123, 42, 100, 0.2);
 }
 
+/* main content styling */
 main {
   display: flex;
   min-height: 100vh;
 }
 
+/* aside styling */
 aside {
   flex: 1;
   background-color: rgb(87, 39, 39);
@@ -115,11 +125,14 @@ aside {
   height: auto;
   max-width: 200px;
 }
+
+/* aside button styling */
 article {
   flex: 3;
   display: flex;
   overflow: scroll;
 }
+
 #farmerTab h2 {
   margin-bottom: 20px;
 }
@@ -128,6 +141,8 @@ article {
   font-size: x-large;
   margin-bottom: 15px;
 }
+
+/* for mobile responsiveness */
 .tabs {
   width: auto;
   display: flex;
@@ -135,8 +150,9 @@ article {
   flex-wrap: wrap;
 }
 
+/* tab button styling */
 .tab-btn {
-  flex: 1; /* Make buttons take equal space */
+  flex: 1; /* make buttons take equal space */
   width: auto;
   padding: 15px 10px;
   margin: 10px 0;
@@ -147,33 +163,33 @@ article {
   font-size: 16px;
   cursor: pointer;
   transition: background-color 0.3s;
-  min-width: 150px; /* Optional: Set a minimum width */
-  max-width: 200px; /* Optional: Set a maximum width */
+  min-width: 150px;
+  max-width: 200px;
 }
 
 .tab-btn:hover {
-  transform: scale(1.05); /* Slightly increase the size */
-  box-shadow: 0 0 10px rgb(145, 255, 0); /* Add a shadow effect */
+  transform: scale(1.05);
+  box-shadow: 0 0 10px rgb(145, 255, 0);
   background-color: #a33a3a;
 }
 
+/* filtering section styling */
 .filtering-section {
   display: flex;
   gap: 30px;
 }
 
+/* filter group styling */
 .sorting-section {
   display: flex;
   gap: 10px;
   margin: 10px 0 10px 0;
 }
 
+/* tab buttons transfer part styling */
 section {
   flex: 1;
   padding: 20px;
-}
-
-section {
   display: none;
 }
 
@@ -181,12 +197,14 @@ section.active {
   display: block;
 }
 
+/* table making responsive */
 table {
   width: 100%;
   border-collapse: collapse; /* allows cell borders to be merged */
   margin-top: 20px;
 }
 
+/* table header and data styling */
 table th,
 table td {
   text-align: left;
@@ -199,34 +217,35 @@ table th {
   color: white;
 }
 
+/* table row styling */
 table tbody tr:nth-child(even) {
   background-color: #f9f9f9;
 }
 
-/* Modal */
+/* modal styling */
 .modal {
-  display: none; /* Hidden by default */
-  position: fixed; /* Stay in place */
-  z-index: 1; /* Sit on top */
+  display: none; /* hidden by default */
+  position: fixed;
+  z-index: 1; /* sit on top */
   left: 0;
   top: 0;
-  width: 100%; /* Full width */
-  height: 100%; /* Full height */
-  overflow: auto; /* Enable scroll if needed */
-  background-color: rgb(0, 0, 0); /* Fallback color */
-  background-color: rgba(0, 0, 0, 0.4); /* Black w/ opacity */
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgb(0, 0, 0);
+  background-color: rgba(0, 0, 0, 0.4);
 }
 
-/* Modal Content */
+/* modal Content */
 .modal-content {
   background-color: #fefefe;
   margin: 15% auto; /* 15% from the top and centered */
   padding: 20px;
   border: 1px solid #888;
-  width: 80%; /* Could be more or less, depending on screen size */
+  width: 80%;
 }
 
-/* The Close Button */
+/* the close button styling*/
 .close,
 .close-purchase {
   color: #aaa;
@@ -234,6 +253,8 @@ table tbody tr:nth-child(even) {
   font-size: 28px;
   font-weight: bold;
 }
+
+/* the close button on hover */
 .close-purchase:hover,
 .close-purchase:focus,
 .close:hover,
@@ -243,13 +264,7 @@ table tbody tr:nth-child(even) {
   cursor: pointer;
 }
 
-#totalBlueberries {
-  padding-top: 10px;
-  font-size: 1.5rem;
-  font-weight: bold;
-  margin-top: 10px;
-}
-
+/* raw berries result section styling */
 #indexTotalBlueberries {
   padding-top: 10px;
   font-size: 1.5rem;
@@ -257,12 +272,14 @@ table tbody tr:nth-child(even) {
   margin-top: 10px;
 }
 
+/* footer styling */
 footer {
   width: auto;
   height: 100px;
   background-color: rgb(58, 26, 26);
 }
 
+/* revenue summary section styling */
 .summary-section {
   margin-top: 20px;
 }
@@ -281,25 +298,136 @@ footer {
   margin: 5px 0;
 }
 
+/* expense section styling */
 #expenseResult {
   margin-top: 10px;
   font-weight: bold;
 }
 
+.revenue-summary {
+  padding: 3px;
+  border-radius: 5px;
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+}
+
+.revenue-summary__section {
+  background-color: #510707;
+  border: 3px solid #8b0000;
+  padding: 15px;
+  margin-bottom: 10px;
+  border-radius: 5px;
+  font-size: 1.05em;
+}
+
+.revenue-summary h3 {
+  color: rgb(255, 255, 255);
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  transition: color 0.3s ease, background-color 0.3s ease;
+}
+
+.revenue-summary h3:hover {
+  color: #510707;
+  background-color: #ffffff;
+}
+
+/* revenue Summary Title */
+.revenue-summary__title {
+  font-size: 1.2em;
+  margin-bottom: 10px;
+  color: #333;
+}
+
+/* revenue Summary List */
+.revenue-summary__list {
+  list-style-type: none;
+  padding: 0;
+}
+
+/* revenue Summary Item */
+.revenue-summary__item {
+  font-size: x-large;
+  margin-bottom: 5px;
+  color: rgb(255, 255, 255);
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  transition: color 0.3s ease, background-color 0.3s ease;
+}
+
+.revenue-summary__item:hover {
+  color: #510707; /* Daha okunabilir bir yazı rengi */
+  background-color: #ffffff; /* Hover durumunda hafif daha koyu bir arka plan */
+}
+
+/* Sales Reports Styles */
+#salesReports {
+  text-align: center;
+}
+
+#salesReports h2 {
+  margin-bottom: 20px;
+}
+
+/* canvas styling */
+#salesReports canvas {
+  margin: 20px auto;
+  display: block;
+}
+
+/* sales report button styling */
+#salesReports button {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  margin: 10px;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+/* sales bar chart styling */
+#salesBarChart {
+  max-width: 600px;
+  max-height: 400px;
+  width: 100%;
+  height: auto;
+}
+
+/* sales chart container styling */
+.chart-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* export buttons */
+.exportPDF,
+.exportCSV {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* sales report button hover effect */
+#salesReports button:hover {
+  background-color: #0056b3;
+}
+
+/* query section styling */
 @media screen and (max-width: 1080px) {
   .table-container {
     overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
+    -webkit-overflow-scrolling: touch; /* Add smooth scrolling on iOS */
   }
   .tabs {
-    flex-direction: unset;
+    flex-direction: unset; /* Reset the flex direction */
     justify-content: space-between;
     gap: 10px;
   }
 
   #farmersTable th,
   #farmersTable td {
-    white-space: nowrap; /* İçeriğin kırılmasını önler */
+    white-space: nowrap; /* Prevent the text from wrapping */
   }
   .filtering-section {
     display: flex;
@@ -318,7 +446,7 @@ footer {
     max-width: 100%;
     display: flex;
     flex-direction: column;
-    align-items: stretch;
+    align-items: stretch; /* this will make the items stretch to the full width */
   }
 
   article {
@@ -329,6 +457,6 @@ footer {
 
   main {
     flex-direction: column;
-    min-height: 100vh;
+    min-height: 100vh; /* make the main content take the full height */
   }
 }
