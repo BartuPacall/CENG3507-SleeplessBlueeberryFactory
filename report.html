@@ -35,9 +35,9 @@
           <h2>Comprehensive Report Generation Module</h2>
           <br />
           <label for="startDate">Start Date:</label>
-          <input type="date" id="startDate" />
+          <input type="date" id="startDate" required />
           <label for="endDate">End Date:</label>
-          <input type="date" id="endDate" />
+          <input type="date" id="endDate" required />
           <br />
           <table id="financialTable">
             <thead>
@@ -73,6 +73,20 @@
               <!-- Inventory data will be dynamically inserted here -->
             </tbody>
           </table>
+          <br />
+          <div class="rawberry-container">
+            <div id="totalBlueberriesContainer">
+              <strong>Raw Blueberries: </strong
+              ><span id="totalBlueberries">0</span> kg
+            </div>
+            <div id="storageLocationContainer">
+              <strong>Storage Location: </strong
+              ><span id="storageLocation">Warehouse</span>
+            </div>
+            <div id="restockDateContainer">
+              <strong>Restock Date: </strong><span id="restockDate">N/A</span>
+            </div>
+          </div>
           <br />
           <div class="exportCSV">
             <button id="exportCSVButton">Export to CSV</button>

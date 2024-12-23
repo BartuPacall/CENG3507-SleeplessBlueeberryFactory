@@ -43,6 +43,7 @@ function updateInventoryTable() {
   const premiumWeights =
     JSON.parse(localStorage.getItem("premiumWeights")) || {};
   const orders = JSON.parse(localStorage.getItem("orders")) || [];
+  const purchases = JSON.parse(localStorage.getItem("purchases")) || [];
 
   const categoryWeights = {
     small: 100,
@@ -108,6 +109,34 @@ function updateInventoryTable() {
     `;
     inventoryTableBody.appendChild(row);
     id++;
+  }
+
+  // Update total blueberries display
+  updateTotalBlueberries();
+
+  // Update restock date display
+  updateRestockDate();
+}
+
+function updateTotalBlueberries() {
+  const totalBlueberries = JSON.parse(
+    localStorage.getItem("totalBlueberriesAmount")
+  ) || { amount: 0 };
+  document.querySelector("#totalBlueberries").textContent =
+    totalBlueberries.amount.toFixed(2);
+}
+
+function updateRestockDate() {
+  const purchases = JSON.parse(localStorage.getItem("purchases")) || [];
+  if (purchases.length > 0) {
+    const latestPurchase = purchases.reduce((latest, purchase) => {
+      const purchaseDate = new Date(purchase.purchaseDate);
+      return purchaseDate > new Date(latest.purchaseDate) ? purchase : latest;
+    });
+    document.querySelector("#restockDate").textContent =
+      latestPurchase.purchaseDate;
+  } else {
+    document.querySelector("#restockDate").textContent = "N/A";
   }
 }
 
@@ -190,7 +219,6 @@ function filterDataByDate(startDate, endDate) {
 
   return { filteredOrders, filteredPurchases };
 }
-
 document.querySelector("#exportCSVButton").addEventListener("click", () => {
   const startDate = new Date(document.querySelector("#startDate").value);
   const endDate = new Date(document.querySelector("#endDate").value);
@@ -223,6 +251,18 @@ document.querySelector("#exportCSVButton").addEventListener("click", () => {
         "Alert Quantity",
       ],
       ...inventoryData,
+      [],
+      ["Summary"],
+      [
+        `Total Blueberries,${
+          document.querySelector("#totalBlueberries").textContent
+        } kg`,
+      ],
+      [`Restock Date,${document.querySelector("#restockDate").textContent}`],
+      [],
+      ["Report Date Range"],
+      [`Start Date,${startDate.toLocaleDateString()}`],
+      [`End Date,${endDate.toLocaleDateString()}`],
     ]);
 
     downloadCSV("report.csv", csvContent);

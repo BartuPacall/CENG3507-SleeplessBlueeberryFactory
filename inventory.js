@@ -86,11 +86,22 @@ document.addEventListener("DOMContentLoaded", () => {
     id++;
   }
 
+  // Update total blueberries display
+  updateTotalBlueberries();
+
   // Add event listener to export button
   document
     .querySelector("#exportCSVButton")
     .addEventListener("click", exportTableToCSV);
 });
+
+function updateTotalBlueberries() {
+  const totalBlueberries = JSON.parse(
+    localStorage.getItem("totalBlueberriesAmount")
+  ) || { amount: 0 };
+  document.querySelector("#totalBlueberries").textContent =
+    totalBlueberries.amount.toFixed(2);
+}
 
 function exportTableToCSV() {
   const table = document.querySelector("#inventoryTable");
@@ -102,7 +113,16 @@ function exportTableToCSV() {
     })
     .join("\n");
 
-  const blob = new Blob([csvContent], { type: "text/csv" });
+  // Add total blueberries amount to the CSV content
+  const totalBlueberries = JSON.parse(
+    localStorage.getItem("totalBlueberriesAmount")
+  ) || { amount: 0 };
+  const totalBlueberriesRow = `Total Blueberries,${totalBlueberries.amount.toFixed(
+    2
+  )} kg`;
+  const finalCsvContent = `${csvContent}\n${totalBlueberriesRow}`;
+
+  const blob = new Blob([finalCsvContent], { type: "text/csv" });
   const url = URL.createObjectURL(blob);
   const a = document.createElement("a");
   a.href = url;

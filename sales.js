@@ -533,9 +533,13 @@ document
       premium: 1, // Assuming premium is already in kg
     };
 
+    const weight = categoryWeights[productCategory] || 1;
+    const totalPrice = pricePerUnit * weight * quantityOrdered;
+
     // Update the order object
     const orders = JSON.parse(localStorage.getItem("orders")) || [];
     const orderIndex = orders.findIndex((order) => order.orderId === orderId);
+
     if (orderIndex !== -1) {
       orders[orderIndex] = {
         orderId,
@@ -544,37 +548,31 @@ document
         shippingAddress,
         productCategory,
         quantityOrdered,
-        totalPrice,
         orderStatus,
         orderDate,
+        totalPrice,
       };
+
       localStorage.setItem("orders", JSON.stringify(orders));
 
-      // Update the order row in the table
-      const row = document.querySelector(
-        `#ordersTable tbody tr[data-order-id="${orderId}"]`
-      );
-      if (row) {
-        row.innerHTML = `
-        <td>${orderId}</td>
-        <td>${customerName}</td>
-        <td>${contactInfo}</td>
-        <td>${shippingAddress}</td>
-        <td>${productCategory}</td>
-        <td>${quantityOrdered}</td>
-        <td>${pricePerKg.toFixed(2)}</td>        
-        <td>${totalPrice.toFixed(2)}</td>
-        <td>${revenue}</td>
-        <td>${orderStatus}</td>
-        <td>${orderDate}</td>
-        <td><button class="update-btn">Update</button></td>
-      `;
-        row
-          .querySelector(".update-btn")
-          .addEventListener("click", () => openUpdateModal(orderId));
-      }
+      // Update the table row
+      const table = document.querySelector("#ordersTable tbody");
+      const rows = table.querySelectorAll("tr");
+      rows.forEach((row) => {
+        if (row.cells[0].innerText === orderId) {
+          row.cells[1].innerText = customerName;
+          row.cells[2].innerText = contactInfo;
+          row.cells[3].innerText = shippingAddress;
+          row.cells[4].innerText = productCategory;
+          row.cells[5].innerText = quantityOrdered;
+          row.cells[6].innerText = pricePerUnit.toFixed(2);
+          row.cells[7].innerText = totalPrice.toFixed(2);
+          row.cells[8].innerText = (totalPrice * quantityOrdered).toFixed(2);
+          row.cells[9].innerText = orderStatus;
+          row.cells[10].innerText = orderDate;
+        }
+      });
 
-      // Close the modal
       closeUpdateModal();
     }
   });
@@ -872,16 +870,20 @@ function exportRevenueToPDF() {
     doc.setFontSize(18);
     doc.text("Revenue Calculation", 14, 22);
 
-    // Add Total Sales and Total Revenue
+    // Add date range
     doc.setFontSize(12);
-    doc.text(`Total Sales: ${totalSales}`, 14, 32);
-    doc.text(`Total Revenue: ${totalRevenue.toFixed(2)}`, 14, 42);
+    doc.text(`Start Date: ${startDate.toLocaleDateString()}`, 14, 32);
+    doc.text(`End Date: ${endDate.toLocaleDateString()}`, 14, 42);
+
+    // Add Total Sales and Total Revenue
+    doc.text(`Total Sales: ${totalSales}`, 14, 52);
+    doc.text(`Total Revenue: ${totalRevenue.toFixed(2)}`, 14, 62);
 
     // Add a line break
-    doc.text(" ", 14, 52);
+    doc.text(" ", 14, 72);
 
     // Add package sales and revenue
-    let yPosition = 62;
+    let yPosition = 82;
     for (const [pkg, sales] of Object.entries(packageSales)) {
       doc.text(`Package: ${pkg}`, 14, yPosition);
       doc.text(`Sales: ${sales}`, 80, yPosition);

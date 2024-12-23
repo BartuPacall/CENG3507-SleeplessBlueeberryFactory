@@ -204,6 +204,10 @@ function updateAlertTable() {
   tableBody.innerHTML = "";
 
   for (const category in alerts) {
+    if (category === "rawBlueberry") {
+      continue; // Skip rawBlueberry
+    }
+
     const alertLevel = alerts[category];
     const currentQuantity = categoryQuantities[category] || 0;
 
