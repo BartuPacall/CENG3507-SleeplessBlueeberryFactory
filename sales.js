@@ -496,6 +496,7 @@ function displayOrder(order) {
   const orders = JSON.parse(localStorage.getItem("orders")) || [];
   populateFilterDropdowns(orders);
 }
+
 function openUpdateModal(orderId) {
   const orders = JSON.parse(localStorage.getItem("orders")) || [];
   const order = orders.find((order) => order.orderId === orderId);
@@ -514,17 +515,9 @@ function openUpdateModal(orderId) {
     document.querySelector("#updateOrderStatus").value = order.orderStatus;
     document.querySelector("#updateOrderDate").value = order.orderDate;
 
-    // Enable the dropdown and other fields
-    document.querySelector("#updateProductCategory").disabled = false;
-    document.querySelector("#updateQuantityOrdered").disabled = false;
-    document.querySelector("#updateOrderDate").disabled = false;
-
     // Show the modal
     const modal = document.querySelector("#updateOrderModal");
     modal.style.display = "block";
-
-    // Disable the dropdown after setting the value
-    document.querySelector("#updateProductCategory").disabled = true;
   }
 }
 // Function to close the update modal
@@ -550,8 +543,9 @@ document
     const quantityOrdered = parseFloat(
       document.querySelector("#updateQuantityOrdered").value
     );
+    // Get the order status and date
     const orderStatus = document.querySelector("#updateOrderStatus").value;
-    const orderDate = document.querySelector("#updateOrderDate").value;
+    const orderDate = document.querySelector("#updateOrderDate").value; // Get the date value
 
     // Get the price of the selected product category from localStorage
     const prices = JSON.parse(localStorage.getItem("categoryPrices")) || {};
@@ -574,6 +568,7 @@ document
     // Update the order object
     const orders = JSON.parse(localStorage.getItem("orders")) || [];
     const orderIndex = orders.findIndex((order) => order.orderId === orderId);
+    // Update the order object
     if (orderIndex !== -1) {
       orders[orderIndex] = {
         orderId,
@@ -597,11 +592,7 @@ document
           row.cells[1].innerText = customerName;
           row.cells[2].innerText = contactInfo;
           row.cells[3].innerText = shippingAddress;
-          row.cells[4].innerText = productCategory;
           row.cells[5].innerText = quantityOrdered;
-          row.cells[6].innerText = pricePerUnit.toFixed(2);
-          row.cells[7].innerText = totalPrice.toFixed(2);
-          row.cells[8].innerText = (totalPrice * quantityOrdered).toFixed(2);
           row.cells[9].innerText = orderStatus;
           row.cells[10].innerText = orderDate;
         }
